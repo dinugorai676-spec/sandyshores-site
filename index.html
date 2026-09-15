@@ -1056,65 +1056,6 @@
         </div>
     </section>
     <!-- ================= ABOUT & DISCORD CTA ================= -->
-        <h2 class="section-title">SEND ORDER REQUEST</h2>
-        <p class="section-subtitle">Configure Your Custom Request</p>
-
-        <div class="order-form-card glass-panel">
-            <form id="order-form" onsubmit="handleFormSubmit(event)">
-                <div class="form-group">
-                    <label>Discord Username</label>
-                    <input type="text" id="form-discord" class="form-control" placeholder="e.g. username#0000 or username" required>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Select Product</label>
-                        <select id="form-product" class="form-control" onchange="updateFormCalculation()">
-                            <!-- Dynamically populated -->
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Quantity</label>
-                        <input type="number" id="form-qty" class="form-control" value="1" min="1" max="99" onchange="updateFormCalculation()" oninput="updateFormCalculation()">
-                    </div>
-                </div>
-
-                <div class="calc-box">
-                    <div class="calc-item">
-                        <div class="calc-label">Price per Item</div>
-                        <div class="calc-val" id="form-unit-price">₹0</div>
-                    </div>
-                    <div class="calc-item">
-                        <div class="calc-label">Quantity</div>
-                        <div class="calc-val" id="form-display-qty">1</div>
-                    </div>
-                    <div class="calc-item">
-                        <div class="calc-label">Total Amount</div>
-                        <div class="calc-val" id="form-total-price">₹0</div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Payment Method</label>
-                    <select id="form-payment" class="form-control">
-                        <option value="UPI QR Code">UPI QR Code</option>
-                        <option value="UPI App Redirect">UPI App Direct</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Additional Notes / In-Game Username</label>
-                    <textarea id="form-message" class="form-control" rows="3" placeholder="Provide any details (e.g. Roblox Username)"></textarea>
-                </div>
-
-                <button type="submit" class="btn-glow" style="width: 100%;">
-                    <i class="fa-solid fa-paper-plane"></i> PROCEED TO PAYMENT
-                </button>
-            </form>
-        </div>
-    </section>
-
-    <!-- ================= ABOUT & DISCORD CTA ================= -->
     <section id="about" class="about-section">
         <h2 class="section-title">ABOUT SANDY SHORES</h2>
         <p class="section-subtitle">The Premier Blox Fruits Community</p>
@@ -1130,7 +1071,7 @@
 
     <section class="discord-cta-section">
         <div class="discord-cta-card glass-panel">
-            <h2 class="section-title">READY TO ORDER?</h2>
+            <h2 class="section-title">FOR MORE INFO!</h2>
             <p style="color: var(--text-sub); margin-bottom: 25px;">Join SANDY SHORES on Discord and get started with your order ticket now!</p>
             <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="btn-glow discord-btn">
                 <i class="fa-brands fa-discord"></i> JOIN DISCORD SERVER
@@ -1321,35 +1262,8 @@
                 availability: "In Stock"
             },
             {
-                id: 7,
-                name: "Tushita Sword Unlock",
-                category: "Items",
-                price: 250,
-                description: "Complete puzzle quest carry to obtain the Tushita sword.",
-                image: "https://via.placeholder.com/200/081529/00D9FF?text=Tushita",
-                availability: "In Stock"
-            },
-            {
-                id: 8,
-                name: "Yama Sword Unlock",
-                category: "Items",
-                price: 200,
-                description: "Elite hunter quest carry to claim the cursed Yama blade.",
-                image: "https://via.placeholder.com/200/081529/00D9FF?text=Yama",
-                availability: "In Stock"
-            },
-            {
-                id: 9,
-                name: "Hallow Scythe Service",
-                category: "Items",
-                price: 300,
-                description: "Soul Reaper summon and kill carry for Scythe drop.",
-                image: "https://via.placeholder.com/200/081529/00D9FF?text=Hallow+Scythe",
-                availability: "In Stock"
-            },
-            {
                 id: 10,
-                name: "Max Level Blox Account",
+                name: "Max Level BloxFRUITS Account",
                 category: "Accounts",
                 price: 1200,
                 description: "Max level account loaded with Godhuman, Soul Guitar & Melees.",
