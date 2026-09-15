@@ -520,11 +520,6 @@
         }
 
         /* ================= PAYMENT SECTION ================= */
-        .payment-section {
-            padding: 80px 5%;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
 
         .payment-grid {
             display: grid;
@@ -986,7 +981,6 @@
         <ul class="nav-links" id="nav-menu">
             <li><a href="#home" class="nav-link active">Home</a></li>
             <li><a href="#marketplace" class="nav-link">Marketplace</a></li>
-            <li><a href="#payment" class="nav-link">Payment</a></li>
             <li><a href="#about" class="nav-link">About</a></li>
             <li><a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="nav-link discord-link">Discord</a></li>
         </ul>
@@ -1061,80 +1055,7 @@
             </div>
         </div>
     </section>
-
-    <!-- ================= PAYMENT SECTION ================= -->
-    <section id="payment" class="payment-section">
-        <h2 class="section-title">PAYMENT METHODS</h2>
-        <p class="section-subtitle">Fast & Secure Official INR Payments</p>
-
-        <div class="payment-grid">
-            <!-- UPI QR CODE -->
-            <div class="payment-card glass-panel">
-                <h3><i class="fa-solid fa-qrcode"></i> 📷 UPI QR CODE</h3>
-                <div class="qr-image-container">
-                    <svg viewBox="0 0 200 200" width="100%" height="100%">
-                        <rect width="200" height="200" fill="white"/>
-                        <path d="M 20 20 H 70 V 70 H 20 Z M 30 30 V 60 H 60 V 30 Z" fill="#000"/>
-                        <rect x="40" y="40" width="10" height="10" fill="#000"/>
-                        <path d="M 130 20 H 180 V 70 H 130 Z M 140 30 V 60 H 170 V 30 Z" fill="#000"/>
-                        <rect x="150" y="40" width="10" height="10" fill="#000"/>
-                        <path d="M 20 130 H 70 V 180 H 20 Z M 30 140 V 170 H 60 V 140 Z" fill="#000"/>
-                        <rect x="40" y="150" width="10" height="10" fill="#000"/>
-                        <rect x="85" y="20" width="30" height="10" fill="#000"/>
-                        <rect x="85" y="40" width="10" height="30" fill="#000"/>
-                        <rect x="105" y="50" width="15" height="15" fill="#000"/>
-                        <rect x="20" y="85" width="20" height="10" fill="#000"/>
-                        <rect x="50" y="85" width="25" height="25" fill="#000"/>
-                        <rect x="85" y="85" width="30" height="30" fill="#00D9FF"/>
-                        <rect x="130" y="85" width="15" height="30" fill="#000"/>
-                        <rect x="155" y="85" width="25" height="10" fill="#000"/>
-                        <rect x="130" y="130" width="20" height="20" fill="#000"/>
-                        <rect x="160" y="140" width="20" height="40" fill="#000"/>
-                        <rect x="85" y="130" width="25" height="10" fill="#000"/>
-                        <rect x="95" y="150" width="20" height="30" fill="#000"/>
-                        <circle cx="100" cy="100" r="14" fill="#030811"/>
-                        <text x="100" y="104" font-family="sans-serif" font-size="10" fill="#00D9FF" text-anchor="middle" font-weight="bold">SS</text>
-                    </svg>
-                </div>
-                <div class="upi-details">
-                    <span>UPI ID:</span>
-                    <strong>sandy6996@ybl</strong>
-                </div>
-                <button class="btn-outline copy-upi-btn" onclick="copyUpiId()" style="width: 100%;">
-                    <i class="fa-regular fa-copy"></i> 📋 COPY UPI ID
-                </button>
-            </div>
-
-            <!-- UPI APP DIRECT -->
-            <div class="payment-card glass-panel" style="justify-content: center;">
-                <h3><i class="fa-solid fa-mobile-screen-button"></i> 📱 UPI APP REDIRECT</h3>
-                <p style="color: var(--text-sub); margin-bottom: 25px; font-size: 0.95rem;">
-                    Pay directly using installed UPI apps (GPay, PhonePe, Paytm, BHIM) with custom dynamic amount parameters.
-                </p>
-                <div class="upi-details">
-                    <span>Target UPI:</span>
-                    <strong>sandy6996@ybl</strong>
-                </div>
-                <button class="btn-glow" onclick="payViaUpiIntentDefault()" style="width: 100%; margin-bottom: 15px;">
-                    <i class="fa-solid fa-bolt"></i> 📱 OPEN UPI APP
-                </button>
-                <button class="btn-outline copy-upi-btn" onclick="copyUpiId()" style="width: 100%;">
-                    <i class="fa-regular fa-copy"></i> 📋 COPY UPI ID
-                </button>
-            </div>
-        </div>
-
-        <div class="warning-box">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <div>
-                <strong style="display: block; font-family: var(--font-head); margin-bottom: 4px;">⚠️ IMPORTANT PAYMENT NOTICE</strong>
-                Always pay inside the website options using the verified UPI ID (<strong>sandy6996@ybl</strong>). SANDY SHORES staff will NEVER ask you to send payment to a different UPI ID. After completing payment, contact the official Discord server to send payment confirmation.
-            </div>
-        </div>
-    </section>
-
-    <!-- ================= ORDER REQUEST FORM ================= -->
-    <section class="order-section">
+    <!-- ================= ABOUT & DISCORD CTA ================= -->
         <h2 class="section-title">SEND ORDER REQUEST</h2>
         <p class="section-subtitle">Configure Your Custom Request</p>
 
@@ -1235,7 +1156,6 @@
                 <ul class="footer-links">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#marketplace">Marketplace</a></li>
-                    <li><a href="#payment">Payment</a></li>
                     <li><a href="#about">About</a></li>
                 </ul>
             </div>
@@ -1295,29 +1215,7 @@
                         OPTION 1: SCAN QR CODE
                     </h4>
                     <div style="width: 160px; height: 160px; background: #fff; padding: 8px; border-radius: 8px; margin: 0 auto 10px auto;">
-                        <svg viewBox="0 0 200 200" width="100%" height="100%">
-                            <rect width="200" height="200" fill="white"/>
-                            <path d="M 20 20 H 70 V 70 H 20 Z M 30 30 V 60 H 60 V 30 Z" fill="#000"/>
-                            <rect x="40" y="40" width="10" height="10" fill="#000"/>
-                            <path d="M 130 20 H 180 V 70 H 130 Z M 140 30 V 60 H 170 V 30 Z" fill="#000"/>
-                            <rect x="150" y="40" width="10" height="10" fill="#000"/>
-                            <path d="M 20 130 H 70 V 180 H 20 Z M 30 140 V 170 H 60 V 140 Z" fill="#000"/>
-                            <rect x="40" y="150" width="10" height="10" fill="#000"/>
-                            <rect x="85" y="20" width="30" height="10" fill="#000"/>
-                            <rect x="85" y="40" width="10" height="30" fill="#000"/>
-                            <rect x="105" y="50" width="15" height="15" fill="#000"/>
-                            <rect x="20" y="85" width="20" height="10" fill="#000"/>
-                            <rect x="50" y="85" width="25" height="25" fill="#000"/>
-                            <rect x="85" y="85" width="30" height="30" fill="#00D9FF"/>
-                            <rect x="130" y="85" width="15" height="30" fill="#000"/>
-                            <rect x="155" y="85" width="25" height="10" fill="#000"/>
-                            <rect x="130" y="130" width="20" height="20" fill="#000"/>
-                            <rect x="160" y="140" width="20" height="40" fill="#000"/>
-                            <rect x="85" y="130" width="25" height="10" fill="#000"/>
-                            <rect x="95" y="150" width="20" height="30" fill="#000"/>
-                            <circle cx="100" cy="100" r="14" fill="#030811"/>
-                            <text x="100" y="104" font-family="sans-serif" font-size="10" fill="#00D9FF" text-anchor="middle" font-weight="bold">SS</text>
-                        </svg>
+                        <img src="https://cdn.discordapp.com/attachments/1469933331364974623/1549409149023166655/Picsart_26-09-15_18-48-30-596.png?ex=6aaa9737&is=6aa945b7&hm=5ba7dd9dbb7f5bbeeef57791f9a947e4a02731e7de270685c4fe42563344275c&" alt="SANDY SHORES UPI QR Code" style="width: 100%; height: 100%; object-fit: contain; display: block;">
                     </div>
                     <div style="font-family: var(--font-head); font-size: 0.9rem; color: #fff; margin-bottom: 8px;">
                         Pay Exactly: <span id="qr-locked-price" style="color: var(--primary-cyan); font-weight: bold;">₹0</span>
@@ -1574,24 +1472,56 @@
         function closeModal() {
             document.getElementById("order-modal").classList.remove("active");
         }
-
         // ================= UPI PAYMENTS =================
-        function payViaModalIntent() {
-            if (!activeModalProduct) return;
-            const amount = activeModalProduct.calculatedTotal;
-            const note = encodeURIComponent(`${activeModalProduct.name} x${activeModalProduct.selectedQty}`);
-            const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${amount}&cu=INR&tn=${note}`;
-            window.location.href = upiUrl;
+        function buildUpiUrl(amount, productName, quantity) {
+            const params = new URLSearchParams({
+                pa: UPI_ID,
+                pn: UPI_NAME,
+                am: Number(amount).toFixed(2),
+                cu: "INR",
+                tn: `${productName} x${quantity}`
+            });
+            return `upi://pay?${params.toString()}`;
         }
 
-        function payViaUpiIntentDefault() {
-            const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&cu=INR`;
+        function openUpiApp(amount, productName, quantity) {
+            const upiUrl = buildUpiUrl(amount, productName, quantity);
+            let appOpened = false;
+
+            const markOpened = () => {
+                appOpened = true;
+            };
+
+            window.addEventListener("blur", markOpened, { once: true });
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) markOpened();
+            }, { once: true });
+
             window.location.href = upiUrl;
+
+            setTimeout(() => {
+                if (!appOpened) {
+                    showToast("⚠️ No UPI app opened. Copy the UPI ID and pay manually.");
+                }
+            }, 1800);
+        }
+
+        function payViaModalIntent() {
+            if (!activeModalProduct) return;
+
+            const amount = activeModalProduct.calculatedTotal;
+            openUpiApp(
+                amount,
+                activeModalProduct.name,
+                activeModalProduct.selectedQty
+            );
         }
 
         function copyUpiId() {
             navigator.clipboard.writeText(UPI_ID).then(() => {
                 showToast("✓ UPI ID COPIED TO CLIPBOARD");
+            }).catch(() => {
+                showToast("⚠️ COPY FAILED. UPI ID: " + UPI_ID);
             });
         }
 
@@ -1602,43 +1532,6 @@
             setTimeout(() => {
                 toast.classList.remove("show");
             }, 3000);
-        }
-
-        // ================= ORDER FORM LOGIC =================
-        function populateOrderFormOptions() {
-            const select = document.getElementById("form-product");
-            select.innerHTML = "";
-            PRODUCTS_DATA.forEach(p => {
-                const opt = document.createElement("option");
-                opt.value = p.id;
-                opt.textContent = `${p.name} - ₹${p.price}`;
-                select.appendChild(opt);
-            });
-            updateFormCalculation();
-        }
-
-        function updateFormCalculation() {
-            const productId = parseInt(document.getElementById("form-product").value);
-            const qtyInput = document.getElementById("form-qty");
-            let qty = parseInt(qtyInput.value) || 1;
-
-            if (qty < 1) { qty = 1; qtyInput.value = 1; }
-            if (qty > 99) { qty = 99; qtyInput.value = 99; }
-
-            const product = PRODUCTS_DATA.find(p => p.id === productId);
-            if (!product) return;
-
-            const total = product.price * qty;
-
-            document.getElementById("form-unit-price").textContent = `₹${product.price}`;
-            document.getElementById("form-display-qty").textContent = qty;
-            document.getElementById("form-total-price").textContent = `₹${total.toLocaleString('en-IN')}`;
-        }
-
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const productId = parseInt(document.getElementById("form-product").value);
-            openOrderModal(productId);
         }
 
         // ================= ABOUT & STATS =================
