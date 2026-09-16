@@ -1019,6 +1019,178 @@
         }
 
         /* ================= ADMIN CONTROL PANEL & MODAL ================= */
+        .admin-dashboard-tabs {
+            display: flex;
+            gap: 8px;
+            margin: 0 0 18px;
+            padding: 5px;
+            background: rgba(3, 8, 17, 0.72);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+        }
+
+        .admin-tab-btn {
+            flex: 1;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text-sub);
+            padding: 10px 12px;
+            border-radius: 7px;
+            font-family: var(--font-head);
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .admin-tab-btn.active {
+            color: var(--primary-cyan);
+            border-color: rgba(0, 217, 255, 0.45);
+            background: rgba(0, 217, 255, 0.09);
+        }
+
+        .admin-tab-btn:hover { color: #fff; }
+
+        .admin-tab-panel { display: none; }
+        .admin-tab-panel.active { display: block; }
+
+        .admin-orders-section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 0 0 14px;
+            padding: 10px 12px;
+            background: rgba(3, 8, 17, 0.72);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+        }
+
+        .admin-orders-section-title {
+            color: #fff;
+            font-family: var(--font-head);
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-orders-section-title i { color: var(--primary-cyan); margin-right: 7px; }
+
+        .admin-messages-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            border: 1px solid rgba(0, 217, 255, 0.38);
+            background: rgba(0, 217, 255, 0.08);
+            color: var(--primary-cyan);
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-family: var(--font-head);
+            font-size: 0.72rem;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .admin-messages-btn:hover, .admin-messages-btn.active {
+            color: #fff;
+            border-color: var(--primary-cyan);
+            background: rgba(0, 217, 255, 0.15);
+        }
+
+        .admin-messages-badge {
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.10);
+            color: #fff;
+            font-size: 0.66rem;
+        }
+
+        .admin-chat-inbox {
+            display: none;
+            margin: 0 0 15px;
+            padding: 12px;
+            background: rgba(3, 8, 17, 0.55);
+            border: 1px solid rgba(0, 217, 255, 0.22);
+            border-radius: 10px;
+        }
+
+        .admin-chat-inbox.active { display: block; }
+
+        .admin-chat-inbox-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .admin-chat-inbox-head strong { display: block; color: #fff; font-family: var(--font-head); font-size: 0.78rem; }
+        .admin-chat-inbox-head strong i { color: var(--primary-cyan); margin-right: 6px; }
+        .admin-chat-inbox-head span { display: block; color: var(--text-sub); font-size: 0.7rem; margin-top: 3px; }
+
+        .admin-chat-close {
+            border: 0; background: transparent; color: var(--text-sub); font-size: 1.15rem; cursor: pointer; padding: 3px 6px;
+        }
+        .admin-chat-close:hover { color: #fff; }
+
+        .admin-chat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .admin-chat-item {
+            width: 100%;
+            text-align: left;
+            background: rgba(3, 8, 17, 0.82);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 13px 15px;
+            color: #fff;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .admin-chat-item:hover {
+            border-color: var(--primary-cyan);
+            background: rgba(0, 217, 255, 0.07);
+            transform: translateY(-1px);
+        }
+
+        .admin-chat-item-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .admin-chat-customer { font-weight: 700; color: #fff; }
+        .admin-chat-order { color: var(--primary-cyan); font-family: var(--font-head); font-size: 0.78rem; }
+        .admin-chat-preview {
+            color: var(--text-sub);
+            font-size: 0.82rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-chat-time { color: rgba(255,255,255,0.45); font-size: 0.72rem; margin-top: 5px; }
+
+        .admin-empty-state {
+            text-align: center;
+            padding: 38px 20px;
+            border: 1px dashed var(--border-glass);
+            border-radius: 10px;
+            color: var(--text-sub);
+            background: rgba(3, 8, 17, 0.45);
+        }
+
         .admin-card {
             max-width: 800px !important;
         }
@@ -1477,10 +1649,36 @@
         <div class="modal-card glass-panel admin-card">
             <button class="modal-close" onclick="closeAdminModal()">&times;</button>
             <h3 class="modal-title" style="color: #FF0055;"><i class="fa-solid fa-user-shield"></i> OWNER MANAGEMENT PANEL</h3>
-            <p style="font-size: 0.85rem; color: var(--text-sub); text-align: center; margin-bottom: 20px;">Review customer payment submissions, trigger approvals, and open live chats.</p>
-            
-            <div id="admin-orders-list">
-                <!-- Dynamically populated by JS -->
+            <p style="font-size: 0.85rem; color: var(--text-sub); text-align: center; margin-bottom: 18px;">Manage payment verification and private customer conversations.</p>
+
+            <div class="admin-orders-section-head">
+                <div class="admin-orders-section-title">
+                    <i class="fa-solid fa-receipt"></i> ORDERS
+                </div>
+                <button class="admin-messages-btn" id="admin-messages-btn" type="button" onclick="toggleAdminChats()" title="Open customer messages">
+                    <i class="fa-solid fa-comments"></i>
+                    <span>MESSAGES</span>
+                    <span class="admin-messages-badge" id="admin-chat-count">0</span>
+                </button>
+            </div>
+
+            <div class="admin-chat-inbox" id="admin-chat-inbox">
+                <div class="admin-chat-inbox-head">
+                    <div>
+                        <strong><i class="fa-solid fa-message"></i> CUSTOMER MESSAGES</strong>
+                        <span>Approved orders only • Private 1-on-1 conversations</span>
+                    </div>
+                    <button type="button" class="admin-chat-close" onclick="toggleAdminChats(false)" aria-label="Close messages">&times;</button>
+                </div>
+                <div id="admin-chats-list" class="admin-chat-list">
+                    <!-- Approved customer chats render here -->
+                </div>
+            </div>
+
+            <div class="admin-tab-panel active" id="admin-orders-panel">
+                <div id="admin-orders-list">
+                    <!-- Dynamically populated by JS -->
+                </div>
             </div>
         </div>
     </div>
@@ -1607,11 +1805,12 @@
                 storeOrders = event.data.orders;
                 localStorage.setItem("global_store_orders", JSON.stringify(storeOrders));
                 updateOrdersUI();
-                if (isOwner) renderAdminOrders();
+                if (isOwner) { renderAdminOrders(); renderAdminChats(); }
             } else if (event.data.type === "SYNC_CHATS") {
                 storeChats = event.data.chats;
                 localStorage.setItem("global_store_chats", JSON.stringify(storeChats));
                 if (activeChatOrderId) renderChatMessages(activeChatOrderId);
+                if (isOwner) renderAdminChats();
             }
         };
 
@@ -1787,7 +1986,62 @@
         /* ================= ADMIN / OWNER CONTROLS ================= */
         function openAdminModal() {
             renderAdminOrders();
+            renderAdminChats();
+            toggleAdminChats(false);
             document.getElementById("admin-modal").classList.add("active");
+        }
+
+        function toggleAdminChats(forceState) {
+            const inbox = document.getElementById("admin-chat-inbox");
+            const button = document.getElementById("admin-messages-btn");
+            if (!inbox) return;
+            const shouldOpen = typeof forceState === "boolean" ? forceState : !inbox.classList.contains("active");
+            inbox.classList.toggle("active", shouldOpen);
+            if (button) button.classList.toggle("active", shouldOpen);
+            if (shouldOpen) renderAdminChats();
+        }
+
+        function renderAdminChats() {
+            const container = document.getElementById("admin-chats-list");
+            const count = document.getElementById("admin-chat-count");
+            if (!container) return;
+
+            const approvedOrders = [...storeOrders]
+                .filter(ord => ord.status === "Payment Approved")
+                .reverse();
+
+            if (count) count.textContent = approvedOrders.length ? `(${approvedOrders.length})` : "";
+
+            if (approvedOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="admin-empty-state">
+                        <i class="fa-regular fa-comments" style="font-size:1.8rem; margin-bottom:10px; display:block; color:var(--primary-cyan);"></i>
+                        <strong style="display:block; color:#fff; margin-bottom:6px;">NO ACTIVE CUSTOMER CHATS</strong>
+                        Approved 1-on-1 conversations will appear here automatically.
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            approvedOrders.forEach(ord => {
+                const messages = Array.isArray(storeChats[ord.id]) ? storeChats[ord.id] : [];
+                const latest = messages[messages.length - 1];
+                const item = document.createElement("button");
+                item.type = "button";
+                item.className = "admin-chat-item";
+                item.onclick = () => openChat(ord.id);
+                const preview = latest?.text || "Private chat ready — start the conversation.";
+                const time = latest?.timestamp ? new Date(latest.timestamp).toLocaleString([], { dateStyle: "short", timeStyle: "short" }) : "No messages yet";
+                item.innerHTML = `
+                    <div class="admin-chat-item-top">
+                        <span class="admin-chat-customer">${escapeHTML(ord.name || "Customer")}</span>
+                        <span class="admin-chat-order">${escapeHTML(ord.id)}</span>
+                    </div>
+                    <div style="font-size:0.76rem;color:var(--text-sub);margin-bottom:5px;">${escapeHTML(ord.product || ord.name || "Order")} • x${escapeHTML(ord.qty)}</div>
+                    <div class="admin-chat-preview">${escapeHTML(preview)}</div>
+                    <div class="admin-chat-time"><i class="fa-regular fa-clock"></i> ${escapeHTML(time)} &nbsp;•&nbsp; Click to open private chat</div>`;
+                container.appendChild(item);
+            });
         }
 
         function closeAdminModal() {
@@ -1831,6 +2085,7 @@
                 `;
                 adminContainer.appendChild(row);
             });
+            renderAdminChats();
         }
 
         function approveOrder(orderId) {
