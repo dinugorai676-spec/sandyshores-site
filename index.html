@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- QRCode.js Library for Dynamic Price-Locked QR Code Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         /* ================= CSS VARIABLES & PALETTE ================= */
@@ -255,6 +257,28 @@
             border-radius: 50%;
             padding: 2px 6px;
             margin-left: 4px;
+        }
+
+        .admin-nav-btn {
+            background: rgba(255, 0, 85, 0.15);
+            border: 1px solid #FF0055;
+            color: #FF0055;
+            font-family: var(--font-head);
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none; /* Dynamic Display */
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.3);
+        }
+
+        .admin-nav-btn:hover {
+            background: #FF0055;
+            color: #FFF;
+            box-shadow: 0 0 20px #FF0055;
         }
 
         .hamburger {
@@ -777,19 +801,44 @@
             padding: 20px;
             text-align: center;
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .custom-qr-img {
-            width: 220px;
-            height: auto;
-            max-height: 250px;
-            object-fit: contain;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
-            background: #fff;
-            padding: 8px;
-            margin: 0 auto 15px auto;
+        #qrcode-container {
+            position: relative;
+            background: #ffffff;
+            padding: 14px;
+            border-radius: 16px;
+            box-shadow: 0 0 25px rgba(0, 217, 255, 0.4);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 210px;
+            min-height: 210px;
+        }
+
+        #qrcode-container img, #qrcode-container canvas {
             display: block;
+            max-width: 190px;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .locked-amount-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 255, 102, 0.15);
+            color: #00FF66;
+            border: 1px solid #00FF66;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-family: var(--font-head);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
         }
 
         .verify-box {
@@ -905,10 +954,19 @@
             font-size: 0.75rem;
             padding: 2px 8px;
             border-radius: 10px;
+            text-transform: uppercase;
+        }
+        
+        .status-pending {
+            background: rgba(255, 170, 0, 0.15);
+            color: #FFAA00;
+            border: 1px solid #FFAA00;
+        }
+
+        .status-approved {
             background: rgba(0, 255, 102, 0.15);
             color: #00FF66;
             border: 1px solid #00FF66;
-            text-transform: uppercase;
         }
 
         .order-item-details {
@@ -929,11 +987,216 @@
             margin-top: 8px;
         }
 
+        .chat-open-btn {
+            margin-top: 10px;
+            width: 100%;
+            background: rgba(0, 255, 102, 0.1);
+            border: 1px solid #00FF66;
+            color: #00FF66;
+            padding: 6px;
+            border-radius: 6px;
+            font-family: var(--font-head);
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .chat-open-btn:hover {
+            background: #00FF66;
+            color: #000;
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
+        }
+
         .empty-orders {
             text-align: center;
             color: var(--text-sub);
             margin: auto 0;
             font-size: 0.95rem;
+        }
+
+        /* ================= ADMIN CONTROL PANEL & MODAL ================= */
+        .admin-card {
+            max-width: 800px !important;
+        }
+
+        .admin-order-row {
+            background: rgba(3, 8, 17, 0.8);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .admin-approve-btn {
+            background: rgba(0, 255, 102, 0.2);
+            border: 1px solid #00FF66;
+            color: #00FF66;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: var(--font-head);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .admin-approve-btn:hover {
+            background: #00FF66;
+            color: #000;
+            box-shadow: 0 0 10px #00FF66;
+        }
+        .admin-decline-btn {
+            background: rgba(255, 45, 85, 0.12);
+            border: 1px solid #ff2d55;
+            color: #ff6b85;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: var(--font-head);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .admin-decline-btn:hover {
+            background: #ff2d55;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255,45,85,0.45);
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .status-declined {
+            color: #ff6b85 !important;
+            border-color: rgba(255,45,85,0.5) !important;
+            background: rgba(255,45,85,0.10) !important;
+        }
+
+        .status-pending {
+            color: #ffd166 !important;
+        }
+
+        .admin-order-meta {
+            margin-top: 5px;
+            line-height: 1.6;
+        }
+
+
+        /* ================= LIVE 1-ON-1 CHAT WIDGET ================= */
+        .chat-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 360px;
+            height: 480px;
+            z-index: 2900;
+            display: none; /* Controlled dynamically */
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--primary-cyan);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .chat-widget.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background: rgba(8, 21, 41, 0.95);
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-head);
+            font-size: 0.9rem;
+            color: var(--primary-cyan);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(3, 8, 17, 0.95);
+        }
+
+        .msg-bubble {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .msg-customer {
+            align-self: flex-start;
+            background: rgba(0, 217, 255, 0.15);
+            border: 1px solid var(--border-glass);
+            color: #fff;
+        }
+
+        .msg-owner {
+            align-self: flex-end;
+            background: rgba(121, 40, 202, 0.3);
+            border: 1px solid var(--accent-purple);
+            color: #fff;
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 10px;
+            background: rgba(8, 21, 41, 0.95);
+            border-top: 1px solid var(--border-glass);
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(3, 8, 17, 0.8);
+            border: 1px solid var(--border-glass);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary-cyan);
+        }
+
+        .chat-send-btn {
+            background: var(--primary-cyan);
+            color: #000;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .chat-send-btn:hover {
+            box-shadow: 0 0 10px var(--primary-cyan);
         }
 
         /* Toast notification */
@@ -996,6 +1259,11 @@
                 flex-direction: column;
                 align-items: stretch;
             }
+            .chat-widget {
+                width: calc(100vw - 40px);
+                right: 20px;
+                bottom: 20px;
+            }
         }
     </style>
 </head>
@@ -1012,6 +1280,11 @@
         </a>
         
         <div class="nav-right-container">
+            <!-- Owner/Admin Access Button (Auto-shows when Owner Key URL param detected) -->
+            <button class="admin-nav-btn" id="admin-trigger-btn" onclick="openAdminModal()">
+                <i class="fa-solid fa-user-shield"></i> ADMIN DASHBOARD
+            </button>
+            
             <button class="my-orders-btn" onclick="openOrdersDrawer()">
                 <i class="fa-solid fa-receipt"></i> MY ORDERS 
                 <span class="orders-badge" id="orders-count">0</span>
@@ -1025,7 +1298,7 @@
             <li><a href="#home" class="nav-link active">Home</a></li>
             <li><a href="#marketplace" class="nav-link">Marketplace</a></li>
             <li><a href="#about" class="nav-link">About</a></li>
-            <li><a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="nav-link discord-link">Discord</a></li>
+            <li><a href="https://discord.gg/yourinvite" target="_blank" class="nav-link discord-link">Discord</a></li>
         </ul>
     </nav>
 
@@ -1038,13 +1311,13 @@
             <h1 class="hero-title">SANDY SHORES</h1>
             <h2 class="hero-subtitle">Your Trusted Blox Fruits Marketplace</h2>
             <p class="hero-desc">
-                A professional Blox Fruits marketplace offering Fruits, Gamepasses, Items, Accounts, and custom requests with fast, reliable, and professional delivery.
+                A professional Blox Fruits marketplace offering Premium Fruits, Gamepasses, Accounts, and custom requests with fast, reliable, and secure delivery.
             </p>
             <div class="hero-cta">
                 <a href="#marketplace" class="btn-glow">
                     <i class="fa-solid fa-cart-shopping"></i> BROWSE MARKETPLACE
                 </a>
-                <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="btn-outline discord-btn">
+                <a href="https://discord.gg/yourinvite" target="_blank" class="btn-outline discord-btn">
                     <i class="fa-brands fa-discord"></i> JOIN DISCORD
                 </a>
             </div>
@@ -1060,7 +1333,6 @@
             <button class="filter-btn active" data-filter="All">All</button>
             <button class="filter-btn" data-filter="Fruits">Fruits</button>
             <button class="filter-btn" data-filter="Gamepasses">Gamepasses</button>
-            <button class="filter-btn" data-filter="Items">Items</button>
             <button class="filter-btn" data-filter="Accounts">Accounts</button>
         </div>
 
@@ -1085,24 +1357,24 @@
                 <div class="step-number">02</div>
                 <div class="step-icon"><i class="fa-solid fa-qrcode"></i></div>
                 <h3 class="step-title">02 — SCAN & PAY</h3>
-                <p style="color: var(--text-sub); font-size: 0.95rem;">Click ORDER NOW to open payment QR. Scan and pay the exact locked total price.</p>
+                <p style="color: var(--text-sub); font-size: 0.95rem;">Click ORDER NOW to view payment QR. Scan to pay exact locked amount via UPI.</p>
             </div>
             <div class="step-card glass-panel">
                 <div class="step-number">03</div>
                 <div class="step-icon"><i class="fa-solid fa-shield-check"></i></div>
-                <h3 class="step-title">03 — VERIFY</h3>
-                <p style="color: var(--text-sub); font-size: 0.95rem;">Enter your Transaction ID under the QR to verify. Your order will save under "My Orders".</p>
+                <h3 class="step-title">03 — VERIFY & CHAT</h3>
+                <p style="color: var(--text-sub); font-size: 0.95rem;">Enter Transaction ID to verify. Once owner approves, a direct 1-on-1 chat unlocks!</p>
             </div>
         </div>
     </section>
 
     <!-- ================= ABOUT & DISCORD CTA ================= -->
     <section id="about" class="about-section">
-        <h2 class="section-title">ABOUT SANDY SHORES</h2>
+        <h2 class="section-title">ABOUT US</h2>
         <p class="section-subtitle">The Premier Blox Fruits Community</p>
 
         <p style="text-align: center; max-width: 800px; margin: 0 auto; color: var(--text-sub);">
-            SANDY SHORES is a dedicated Blox Fruits marketplace community focused on providing fast, reliable, and professional items, accounts, and fruit trading while maintaining an active, safe, and helpful server environment.
+            We are a dedicated Blox Fruits marketplace community focused on providing fast, reliable, and professional items, accounts, and fruit trading while maintaining an active, safe, and helpful server environment.
         </p>
 
         <div class="stats-grid" id="stats-container">
@@ -1113,8 +1385,8 @@
     <section class="discord-cta-section">
         <div class="discord-cta-card glass-panel">
             <h2 class="section-title">JOIN OUR COMMUNITY</h2>
-            <p style="color: var(--text-sub); margin-bottom: 25px;">Join SANDY SHORES on Discord for active giveaways, instant support, and order delivery!</p>
-            <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="btn-glow discord-btn">
+            <p style="color: var(--text-sub); margin-bottom: 25px;">Join our Discord for active giveaways, instant support, and order delivery!</p>
+            <a href="https://discord.gg/yourinvite" target="_blank" class="btn-glow discord-btn">
                 <i class="fa-brands fa-discord"></i> JOIN DISCORD SERVER
             </a>
         </div>
@@ -1127,10 +1399,10 @@
                 <div class="footer-brand"><i class="fa-solid fa-water"></i> SANDY SHORES</div>
                 <p class="footer-desc">Your trusted Blox Fruits marketplace hub.</p>
                 <div class="social-links">
-                    <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="social-icon discord-link"><i class="fa-brands fa-discord"></i></a>
-                    <a href="https://youtube.com/@sandyshores" target="_blank" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="https://instagram.com/sandyshores" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://x.com/sandyshores" target="_blank" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://discord.gg/yourinvite" target="_blank" class="social-icon discord-link"><i class="fa-brands fa-discord"></i></a>
+                    <a href="https://youtube.com" target="_blank" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://instagram.com" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://x.com" target="_blank" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
                 </div>
             </div>
             <div>
@@ -1144,7 +1416,7 @@
             <div>
                 <h4 class="footer-title">Official Discord</h4>
                 <p style="color: var(--text-sub); font-size: 0.9rem; margin-bottom: 10px;">Instant support and order fulfillment:</p>
-                <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="btn-outline discord-btn" style="padding: 8px 15px; font-size: 0.85rem;">
+                <a href="https://discord.gg/yourinvite" target="_blank" class="btn-outline discord-btn" style="padding: 8px 15px; font-size: 0.85rem;">
                     <i class="fa-brands fa-discord"></i> DISCORD SERVER
                 </a>
             </div>
@@ -1152,7 +1424,7 @@
         <div class="footer-bottom">
             <p>© <span id="year"></span> SANDY SHORES. All rights reserved.</p>
             <p style="margin-top: 5px; font-size: 0.75rem; color: #64748B;">
-                SANDY SHORES is an independent community marketplace and is not affiliated with or endorsed by Roblox or Blox Fruits.
+                We are an independent community marketplace and are not affiliated with or endorsed by Roblox or Blox Fruits.
             </p>
         </div>
     </footer>
@@ -1173,18 +1445,21 @@
                     <span id="modal-qty">-</span>
                 </div>
                 <div class="summary-row total">
-                    <span>LOCKED AMOUNT:</span>
+                    <span>TOTAL AMOUNT:</span>
                     <span id="modal-total-price">₹0</span>
                 </div>
             </div>
 
-            <!-- PAYMENT QR IMAGE CONTAINER -->
             <div class="qr-display-box">
-                <img src="https://cdn.discordapp.com/attachments/1469933331364974623/1549409149023166655/Picsart_26-09-15_18-48-30-596.png?ex=6aabe8b7&is=6aaa9737&hm=6f0120eb4c1cb5a3d187003c13ca0b0eab1e6efd51225d5f671125fdcbd3e7c3&" alt="Payment QR Code" class="custom-qr-img">
-                <p style="font-size: 0.85rem; color: var(--text-cyan);">Scan with any UPI App (GPay, PhonePe, Paytm, BHIM)</p>
+                <div class="locked-amount-badge">
+                    <i class="fa-solid fa-lock"></i> Amount Locked: <span id="locked-badge-amount">₹0</span>
+                </div>
+                <div id="qrcode-container"></div>
+                <p style="font-size: 0.85rem; color: var(--text-cyan); margin-top: 5px;">
+                    Scan with GPay, PhonePe, Paytm, BHIM (UPI link locks amount automatically)
+                </p>
             </div>
 
-            <!-- VERIFY TRANSACTION ID SECTION -->
             <div class="verify-box">
                 <label style="font-family: var(--font-head); font-size: 0.85rem; color: var(--text-sub);">
                     <i class="fa-solid fa-key"></i> VERIFY TRANSACTION ID
@@ -1193,6 +1468,19 @@
                 <button class="btn-glow" style="width: 100%; justify-content: center;" onclick="verifyAndSubmitOrder()">
                     <i class="fa-solid fa-circle-check"></i> VERIFY & SUBMIT ORDER
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= OWNER / ADMIN CONTROL PANEL MODAL ================= -->
+    <div class="modal-overlay" id="admin-modal">
+        <div class="modal-card glass-panel admin-card">
+            <button class="modal-close" onclick="closeAdminModal()">&times;</button>
+            <h3 class="modal-title" style="color: #FF0055;"><i class="fa-solid fa-user-shield"></i> OWNER MANAGEMENT PANEL</h3>
+            <p style="font-size: 0.85rem; color: var(--text-sub); text-align: center; margin-bottom: 20px;">Review customer payment submissions, trigger approvals, and open live chats.</p>
+            
+            <div id="admin-orders-list">
+                <!-- Dynamically populated by JS -->
             </div>
         </div>
     </div>
@@ -1212,13 +1500,31 @@
         </div>
     </div>
 
+    <!-- ================= LIVE 1-ON-1 CHAT WIDGET ================= -->
+    <div class="chat-widget glass-panel" id="chat-widget">
+        <div class="chat-header">
+            <span><i class="fa-solid fa-comments"></i> PRIVATE 1-ON-1 • <span id="chat-order-id">ORD-000</span></span>
+            <button onclick="closeChat()" style="background:none; border:none; color:var(--text-sub); cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="chat-messages" id="chat-messages-box">
+            <!-- Messages render dynamically -->
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input-field" class="chat-input" placeholder="Type message..." onkeypress="handleChatKeyPress(event)">
+            <button class="chat-send-btn" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="toast">✓ ORDER SUBMITTED SUCCESSFULLY</div>
 
     <!-- ================= JAVASCRIPT ================= -->
     <script>
         // ================= CONFIGURATION =================
-        const DISCORD_INVITE = "https://discord.gg/FtCe5nPMN2";
+        const DISCORD_INVITE = "https://discord.gg/yourinvite";
+        const MERCHANT_UPI_ID = "sandy6996@ybl"; 
+        const MERCHANT_NAME = "SANDY SHORES";
+        const OWNER_SECRET_KEY = "sandy123"; // Query parameter or key to identify Owner (?admin=sandy123)
 
         const STATS_DATA = [
             { number: "500+", label: "Members" },
@@ -1227,14 +1533,13 @@
             { number: "100%", label: "Professional Service" }
         ];
 
-        // ================= MARKETPLACE DATA =================
         const PRODUCTS_DATA = [
             {
                 id: 1,
                 name: "Dragon Fruit",
                 category: "Fruits",
-                price: 799,
-                description: "High demand physical/perm Dragon fruit for ultimate destruction.",
+                price: 900,
+                description: "Mythical Physical Dragon Fruit (WEST / EAST variant options). Unleash ultimate draconian destruction.",
                 image: "https://via.placeholder.com/200/081529/00D9FF?text=Dragon+Fruit",
                 availability: "In Stock"
             },
@@ -1242,18 +1547,9 @@
                 id: 2,
                 name: "Kitsune Fruit",
                 category: "Fruits",
-                price: 899,
-                description: "Extremely rare, fast-paced mystical transformation fruit.",
+                price: 350,
+                description: "Extremely rare Physical Kitsune Fruit. Command lightning-fast transformations and spirit fire.",
                 image: "https://via.placeholder.com/200/081529/00D9FF?text=Kitsune+Fruit",
-                availability: "In Stock"
-            },
-            {
-                id: 3,
-                name: "Dough Fruit",
-                category: "Fruits",
-                price: 499,
-                description: "Top-tier PvP awakening fruit for dominant gameplay.",
-                image: "https://via.placeholder.com/200/081529/00D9FF?text=Dough+Fruit",
                 availability: "In Stock"
             },
             {
@@ -1261,7 +1557,7 @@
                 name: "2x Money Gamepass",
                 category: "Gamepasses",
                 price: 350,
-                description: "Doubles all Beli earned from defeating enemies and bosses.",
+                description: "Permanent 2x Beli Multiplier. Delivered instantly via standard in-game gifting method.",
                 image: "https://via.placeholder.com/200/081529/00D9FF?text=2x+Money",
                 availability: "In Stock"
             },
@@ -1270,7 +1566,7 @@
                 name: "2x Mastery Gamepass",
                 category: "Gamepasses",
                 price: 350,
-                description: "Doubles mastery progression speed for all weapons and fruits.",
+                description: "Double your leveling speed for all fruits and weapons. Instant in-game gift transfer.",
                 image: "https://via.placeholder.com/200/081529/00D9FF?text=2x+Mastery",
                 availability: "In Stock"
             },
@@ -1279,35 +1575,8 @@
                 name: "Fast Boats Gamepass",
                 category: "Gamepasses",
                 price: 299,
-                description: "Unlocks high-speed luxury boats for rapid sea navigation.",
+                description: "Unlock high-speed luxury sea vessels. Sent directly to your account using the gift method.",
                 image: "https://via.placeholder.com/200/081529/00D9FF?text=Fast+Boats",
-                availability: "In Stock"
-            },
-            {
-                id: 7,
-                name: "Tushita Sword Unlock",
-                category: "Items",
-                price: 250,
-                description: "Complete puzzle quest carry to obtain the Tushita sword.",
-                image: "https://via.placeholder.com/200/081529/00D9FF?text=Tushita",
-                availability: "In Stock"
-            },
-            {
-                id: 8,
-                name: "Yama Sword Unlock",
-                category: "Items",
-                price: 200,
-                description: "Elite hunter quest carry to claim the cursed Yama blade.",
-                image: "https://via.placeholder.com/200/081529/00D9FF?text=Yama",
-                availability: "In Stock"
-            },
-            {
-                id: 9,
-                name: "Hallow Scythe Service",
-                category: "Items",
-                price: 300,
-                description: "Soul Reaper summon and kill carry for Scythe drop.",
-                image: "https://via.placeholder.com/200/081529/00D9FF?text=Hallow+Scythe",
                 availability: "In Stock"
             },
             {
@@ -1315,16 +1584,55 @@
                 name: "Max Level Blox Account",
                 category: "Accounts",
                 price: 1200,
-                description: "Max level account loaded with Godhuman, Soul Guitar & Melees.",
+                description: "Fully leveled account stacked with Godhuman, Soul Guitar, rare Melees & inventory.",
                 image: "https://via.placeholder.com/200/081529/00D9FF?text=Max+Account",
                 availability: "In Stock"
             }
         ];
 
         let activeModalProduct = null;
-        let myOrders = JSON.parse(localStorage.getItem("sandy_shores_orders") || "[]");
+        let qrCodeInstance = null;
+        let isOwner = false;
+        let activeChatOrderId = null;
 
-        // ================= GLOBAL EVENT HANDLERS =================
+        // Persistent Orders & Chat Stores
+        let storeOrders = JSON.parse(localStorage.getItem("global_store_orders") || "[]");
+        let storeChats = JSON.parse(localStorage.getItem("global_store_chats") || "{}");
+
+        // Broadcast Channel for Synchronized Real-time Sync across windows/tabs
+        const syncChannel = new BroadcastChannel("sandy_shores_sync");
+
+        syncChannel.onmessage = (event) => {
+            if (event.data.type === "SYNC_ORDERS") {
+                storeOrders = event.data.orders;
+                localStorage.setItem("global_store_orders", JSON.stringify(storeOrders));
+                updateOrdersUI();
+                if (isOwner) renderAdminOrders();
+            } else if (event.data.type === "SYNC_CHATS") {
+                storeChats = event.data.chats;
+                localStorage.setItem("global_store_chats", JSON.stringify(storeChats));
+                if (activeChatOrderId) renderChatMessages(activeChatOrderId);
+            }
+        };
+
+        function saveAndSync() {
+            localStorage.setItem("global_store_orders", JSON.stringify(storeOrders));
+            localStorage.setItem("global_store_chats", JSON.stringify(storeChats));
+            syncChannel.postMessage({ type: "SYNC_ORDERS", orders: storeOrders });
+            syncChannel.postMessage({ type: "SYNC_CHATS", chats: storeChats });
+        }
+
+        // Check Owner Authentication via URL Param (?admin=sandy123) or Local Owner Session
+        function checkOwnerStatus() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get("admin") === OWNER_SECRET_KEY || localStorage.getItem("is_sandy_owner") === "true") {
+                isOwner = true;
+                localStorage.setItem("is_sandy_owner", "true");
+                const adminBtn = document.getElementById("admin-trigger-btn");
+                if (adminBtn) adminBtn.style.display = "flex";
+            }
+        }
+
         function updateDiscordLinks() {
             document.querySelectorAll(".discord-btn, .discord-link").forEach(btn => {
                 btn.href = DISCORD_INVITE;
@@ -1396,6 +1704,22 @@
             totalDisplay.textContent = `₹${calculatedTotal.toLocaleString('en-IN')}`;
         }
 
+        function generateLockedUPIQRCode(upiId, merchantName, amount, note) {
+            const container = document.getElementById("qrcode-container");
+            container.innerHTML = "";
+
+            const upiString = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(merchantName)}&am=${amount.toFixed(2)}&cu=INR&tn=${encodeURIComponent(note)}`;
+
+            qrCodeInstance = new QRCode(container, {
+                text: upiString,
+                width: 190,
+                height: 190,
+                colorDark: "#030811",
+                colorLight: "#FFFFFF",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
         function openOrderModal(productId) {
             const product = PRODUCTS_DATA.find(p => p.id === productId);
             if (!product) return;
@@ -1415,7 +1739,11 @@
             
             const formattedTotal = `₹${lockedTotal.toLocaleString('en-IN')}`;
             document.getElementById("modal-total-price").textContent = formattedTotal;
+            document.getElementById("locked-badge-amount").textContent = formattedTotal;
             document.getElementById("txid-input").value = "";
+
+            const paymentNote = `${product.name} x${qty}`;
+            generateLockedUPIQRCode(MERCHANT_UPI_ID, MERCHANT_NAME, lockedTotal, paymentNote);
 
             document.getElementById("order-modal").classList.add("active");
         }
@@ -1433,8 +1761,9 @@
 
             if (!activeModalProduct) return;
 
+            const orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
             const newOrder = {
-                id: 'ORD-' + Math.floor(100000 + Math.random() * 900000),
+                id: orderId,
                 name: activeModalProduct.name,
                 qty: activeModalProduct.selectedQty,
                 total: activeModalProduct.calculatedTotal,
@@ -1443,15 +1772,194 @@
                 date: new Date().toLocaleDateString()
             };
 
-            myOrders.unshift(newOrder);
-            localStorage.setItem("sandy_shores_orders", JSON.stringify(myOrders));
-            
+            storeOrders.unshift(newOrder);
+            storeChats[orderId] = [
+                { sender: "owner", text: "Welcome! Your payment is currently under verification by Sandy Shores." }
+            ];
+
+            saveAndSync();
             updateOrdersUI();
             closeModal();
             showToast("✓ ORDER SUBMITTED & VERIFICATION PENDING");
             openOrdersDrawer();
         }
 
+        /* ================= ADMIN / OWNER CONTROLS ================= */
+        function openAdminModal() {
+            renderAdminOrders();
+            document.getElementById("admin-modal").classList.add("active");
+        }
+
+        function closeAdminModal() {
+            document.getElementById("admin-modal").classList.remove("active");
+        }
+
+        function renderAdminOrders() {
+            const adminContainer = document.getElementById("admin-orders-list");
+            if (!adminContainer) return;
+
+            if (storeOrders.length === 0) {
+                adminContainer.innerHTML = `<p style="text-align:center; color: var(--text-sub); padding: 20px 0;">No customer orders found.</p>`;
+                return;
+            }
+
+            adminContainer.innerHTML = "";
+            [...storeOrders].reverse().forEach(ord => {
+                const isApproved = ord.status === "Payment Approved";
+                const isDeclined = ord.status === "Payment Declined";
+                const isPending = !isApproved && !isDeclined;
+                const statusClass = isApproved ? "status-approved" : (isDeclined ? "status-declined" : "status-pending");
+                const row = document.createElement("div");
+                row.className = "admin-order-row";
+                row.innerHTML = `
+                    <div style="min-width:260px; flex:1;">
+                        <strong style="color:var(--primary-cyan); font-family:var(--font-head);">${escapeHTML(ord.id)}</strong> — ${escapeHTML(ord.name)} (x${ord.qty})<br>
+                        <div class="admin-order-meta" style="font-size:0.85rem; color:var(--text-sub);">
+                            <span>Txn ID: <code style="color:var(--text-cyan);">${escapeHTML(ord.txId)}</code></span>
+                            <span> • Total: <strong style="color:#fff;">₹${Number(ord.total).toLocaleString('en-IN')}</strong></span>
+                            <span> • ${escapeHTML(ord.date || '')}</span>
+                        </div>
+                    </div>
+                    <div class="admin-actions">
+                        <span class="order-status ${statusClass}">${escapeHTML(ord.status)}</span>
+                        ${isPending ? `
+                            <button class="admin-approve-btn" onclick="approveOrder('${ord.id}')"><i class="fa-solid fa-check"></i> APPROVE</button>
+                            <button class="admin-decline-btn" onclick="declineOrder('${ord.id}')"><i class="fa-solid fa-xmark"></i> DECLINE</button>
+                        ` : ''}
+                        <button class="chat-open-btn" style="margin-top:0;" onclick="openChat('${ord.id}')"><i class="fa-solid fa-comment-dots"></i> ${isApproved ? 'CHAT' : 'VIEW CHAT'}</button>
+                    </div>
+                `;
+                adminContainer.appendChild(row);
+            });
+        }
+
+        function approveOrder(orderId) {
+            const order = storeOrders.find(o => o.id === orderId);
+            if (!order || order.status === "Payment Approved") return;
+
+            order.status = "Payment Approved";
+            order.statusUpdatedAt = new Date().toISOString();
+            if (!storeChats[orderId]) storeChats[orderId] = [];
+            storeChats[orderId].push({
+                sender: "owner",
+                text: "Payment approved. Welcome! You can now use this private 1-on-1 chat for your order.",
+                timestamp: new Date().toISOString()
+            });
+
+            saveAndSync();
+            updateOrdersUI();
+            renderAdminOrders();
+            showToast(`✓ ${orderId} — PAYMENT APPROVED`);
+        }
+
+        function declineOrder(orderId) {
+            const order = storeOrders.find(o => o.id === orderId);
+            if (!order || order.status === "Payment Approved" || order.status === "Payment Declined") return;
+
+            const reason = prompt("Optional decline reason for the customer:", "Transaction could not be verified. Please contact support if you believe this is an error.");
+            if (reason === null) return;
+
+            const cleanReason = reason.trim() || "Transaction could not be verified. Please contact support.";
+            order.status = "Payment Declined";
+            order.statusUpdatedAt = new Date().toISOString();
+            order.declineReason = cleanReason;
+            if (!storeChats[orderId]) storeChats[orderId] = [];
+            storeChats[orderId].push({
+                sender: "owner",
+                text: `Payment declined. ${cleanReason}`,
+                timestamp: new Date().toISOString()
+            });
+
+            saveAndSync();
+            updateOrdersUI();
+            renderAdminOrders();
+            showToast(`✓ ${orderId} — PAYMENT DECLINED`);
+        }
+
+        /* ================= LIVE CHAT WIDGET SYSTEM ================= */
+        function openChat(orderId) {
+            const order = storeOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            // Customers may only access the private chat after approval.
+            if (!isOwner && order.status !== "Payment Approved") {
+                showToast("Private chat unlocks after payment approval.");
+                return;
+            }
+
+            activeChatOrderId = orderId;
+            const chatOrderId = document.getElementById("chat-order-id");
+            if (chatOrderId) chatOrderId.textContent = orderId;
+            renderChatMessages(orderId);
+            document.getElementById("chat-widget").classList.add("active");
+            closeOrdersDrawer();
+            closeAdminModal();
+        }
+
+        function closeChat() {
+            document.getElementById("chat-widget").classList.remove("active");
+            activeChatOrderId = null;
+        }
+
+        function escapeHTML(value) {
+            return String(value ?? "").replace(/[&<>"']/g, char => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+            }[char]));
+        }
+
+        function renderChatMessages(orderId) {
+            const box = document.getElementById("chat-messages-box");
+            if (!box) return;
+            box.innerHTML = "";
+
+            const msgs = storeChats[orderId] || [];
+            if (msgs.length === 0) {
+                box.innerHTML = `<div style="text-align:center;color:var(--text-sub);font-size:0.8rem;padding:20px;">Private order chat started.</div>`;
+                return;
+            }
+
+            msgs.forEach(m => {
+                const bubble = document.createElement("div");
+                const isOwnerMsg = m.sender === "owner";
+                const mine = isOwner ? isOwnerMsg : !isOwnerMsg;
+                bubble.className = `msg-bubble ${mine ? 'msg-owner' : 'msg-customer'}`;
+                const time = m.timestamp ? new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+                bubble.innerHTML = `<strong>${isOwnerMsg ? 'SANDY SHORES' : 'CUSTOMER'}</strong><div>${escapeHTML(m.text)}</div><small style="opacity:.55;display:block;margin-top:4px;">${time}</small>`;
+                box.appendChild(bubble);
+            });
+
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById("chat-input-field");
+            const text = input.value.trim();
+            if (!text || !activeChatOrderId) return;
+
+            const order = storeOrders.find(o => o.id === activeChatOrderId);
+            if (!order) return;
+            if (!isOwner && order.status !== "Payment Approved") {
+                showToast("Private chat is unavailable until payment is approved.");
+                return;
+            }
+
+            if (!storeChats[activeChatOrderId]) storeChats[activeChatOrderId] = [];
+            storeChats[activeChatOrderId].push({
+                sender: isOwner ? "owner" : "customer",
+                text: text.slice(0, 1000),
+                timestamp: new Date().toISOString()
+            });
+
+            input.value = "";
+            saveAndSync();
+            renderChatMessages(activeChatOrderId);
+        }
+
+        function handleChatKeyPress(e) {
+            if (e.key === "Enter") sendChatMessage();
+        }
+
+        /* ================= MY ORDERS DRAWER ================= */
         function openOrdersDrawer() {
             document.getElementById("drawer-overlay").classList.add("active");
         }
@@ -1462,12 +1970,12 @@
 
         function updateOrdersUI() {
             const countEl = document.getElementById("orders-count");
-            if (countEl) countEl.textContent = myOrders.length;
+            if (countEl) countEl.textContent = storeOrders.length;
 
             const listEl = document.getElementById("orders-list");
             if (!listEl) return;
 
-            if (myOrders.length === 0) {
+            if (storeOrders.length === 0) {
                 listEl.innerHTML = `
                     <div class="empty-orders">
                         <i class="fa-solid fa-box-open" style="font-size: 2.5rem; margin-bottom: 10px; color: var(--border-glow);"></i>
@@ -1478,20 +1986,30 @@
             }
 
             listEl.innerHTML = "";
-            myOrders.forEach(ord => {
+            [...storeOrders].reverse().forEach(ord => {
+                const isApproved = ord.status === "Payment Approved";
+                const isDeclined = ord.status === "Payment Declined";
+                const statusClass = isApproved ? "status-approved" : (isDeclined ? "status-declined" : "status-pending");
                 const card = document.createElement("div");
                 card.className = "order-item-card";
                 card.innerHTML = `
                     <div class="order-item-header">
-                        <span>${ord.name} (x${ord.qty})</span>
-                        <span class="order-status">${ord.status}</span>
+                        <span>${escapeHTML(ord.name)} (x${ord.qty})</span>
+                        <span class="order-status ${statusClass}">${escapeHTML(ord.status)}</span>
                     </div>
                     <div class="order-item-details">
-                        Total Amount: <strong style="color: var(--primary-cyan)">₹${ord.total.toLocaleString('en-IN')}</strong> | Date: ${ord.date}
+                        Order <strong>${escapeHTML(ord.id)}</strong> • Total: <strong style="color: var(--primary-cyan)">₹${Number(ord.total).toLocaleString('en-IN')}</strong><br>
+                        Date: ${escapeHTML(ord.date || '')}
                     </div>
                     <div class="order-txid">
-                        <i class="fa-solid fa-hashtag"></i> Txn ID: ${ord.txId}
+                        <i class="fa-solid fa-receipt"></i> Transaction ID: ${escapeHTML(ord.txId)}
                     </div>
+                    ${isDeclined && ord.declineReason ? `<div style="font-size:0.82rem;color:#ff8aa0;margin-top:8px;"><i class="fa-solid fa-circle-exclamation"></i> ${escapeHTML(ord.declineReason)}</div>` : ''}
+                    ${isApproved ? `
+                        <button class="chat-open-btn" onclick="openChat('${ord.id}')">
+                            <i class="fa-solid fa-comments"></i> OPEN PRIVATE 1-ON-1 CHAT
+                        </button>
+                    ` : ''}
                 `;
                 listEl.appendChild(card);
             });
@@ -1618,6 +2136,7 @@
             const yearEl = document.getElementById("year");
             if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+            checkOwnerStatus();
             updateDiscordLinks();
             renderProducts("All");
             setupFilters();
