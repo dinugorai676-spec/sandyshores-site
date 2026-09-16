@@ -6,10 +6,12 @@
     <title>SANDY SHORES — Premium Blox Fruits Marketplace</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Orbitron & Rajdhani for gaming style -->
+    <!-- Google Fonts: Orbitron & Rajdhani -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- QRCode.js Library for Dynamic Price-Locked QR Code Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         /* ================= CSS VARIABLES & PALETTE ================= */
@@ -50,7 +52,6 @@
             position: relative;
         }
 
-        /* Animated Ocean Canvas Background */
         #ocean-canvas {
             position: fixed;
             top: 0;
@@ -82,7 +83,6 @@
             list-style: none;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -203,6 +203,12 @@
             text-shadow: 0 0 10px var(--cyan-glow);
         }
 
+        .nav-right-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         .nav-links {
             display: flex;
             gap: 25px;
@@ -221,6 +227,38 @@
             text-shadow: 0 0 8px var(--cyan-glow);
         }
 
+        .my-orders-btn {
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid var(--primary-cyan);
+            color: var(--primary-cyan);
+            font-family: var(--font-head);
+            font-size: 0.85rem;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .my-orders-btn:hover {
+            background: var(--primary-cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--cyan-glow);
+        }
+
+        .orders-badge {
+            background: #00FF66;
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border-radius: 50%;
+            padding: 2px 6px;
+            margin-left: 4px;
+        }
+
         .hamburger {
             display: none;
             font-size: 1.5rem;
@@ -230,7 +268,7 @@
 
         /* ================= HERO SECTION ================= */
         .hero {
-            min-height: 90vh;
+            min-height: 85vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -308,7 +346,7 @@
 
         /* ================= MARKETPLACE ================= */
         .marketplace-section {
-            padding: 80px 5%;
+            padding: 60px 5% 80px 5%;
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -519,156 +557,6 @@
             margin-bottom: 10px;
         }
 
-        /* ================= PAYMENT SECTION ================= */
-
-        .payment-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .payment-card {
-            padding: 30px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .payment-card h3 {
-            font-family: var(--font-head);
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            color: var(--primary-cyan);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .qr-image-container {
-            width: 220px;
-            height: 220px;
-            background: #fff;
-            padding: 10px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .qr-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .upi-details {
-            background: rgba(3, 8, 17, 0.6);
-            border: 1px solid var(--border-glass);
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-family: var(--font-head);
-            font-size: 1.1rem;
-            color: var(--text-cyan);
-            margin-bottom: 15px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .warning-box {
-            background: rgba(255, 170, 0, 0.08);
-            border: 1px solid rgba(255, 170, 0, 0.4);
-            border-radius: 12px;
-            padding: 20px;
-            color: #FFD000;
-            font-size: 0.95rem;
-            display: flex;
-            gap: 15px;
-            align-items: flex-start;
-        }
-
-        .warning-box i {
-            font-size: 1.5rem;
-            margin-top: 2px;
-        }
-
-        /* ================= ORDER REQUEST FORM ================= */
-        .order-section {
-            padding: 80px 5%;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .order-form-card {
-            padding: 40px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-family: var(--font-head);
-            font-size: 0.9rem;
-            color: var(--text-cyan);
-            margin-bottom: 8px;
-        }
-
-        .form-control {
-            width: 100%;
-            background: rgba(3, 8, 17, 0.8);
-            border: 1px solid var(--border-glass);
-            border-radius: 8px;
-            padding: 12px 15px;
-            color: #fff;
-            font-family: var(--font-body);
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-cyan);
-            box-shadow: 0 0 10px var(--cyan-glow);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .calc-box {
-            background: rgba(0, 217, 255, 0.05);
-            border: 1px solid var(--border-glass);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-around;
-            text-align: center;
-        }
-
-        .calc-item {
-            font-family: var(--font-head);
-        }
-
-        .calc-label {
-            font-size: 0.8rem;
-            color: var(--text-sub);
-        }
-
-        .calc-val {
-            font-size: 1.2rem;
-            color: var(--primary-cyan);
-        }
-
         /* ================= ABOUT & DISCORD CTA ================= */
         .about-section {
             padding: 80px 5%;
@@ -796,7 +684,7 @@
             font-size: 0.85rem;
         }
 
-        /* ================= MODAL ================= */
+        /* ================= MODALS & DRAWER ================= */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -823,7 +711,7 @@
 
         .modal-card {
             width: 100%;
-            max-width: 550px;
+            max-width: 520px;
             padding: 30px;
             position: relative;
             transform: scale(0.9);
@@ -854,9 +742,10 @@
 
         .modal-title {
             font-family: var(--font-head);
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: var(--primary-cyan);
             margin-bottom: 15px;
+            text-align: center;
         }
 
         .modal-summary {
@@ -880,25 +769,202 @@
             margin-top: 8px;
             font-weight: bold;
             color: var(--primary-cyan);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
-        .modal-payment-options {
+        .qr-display-box {
+            background: rgba(3, 8, 17, 0.8);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            margin-top: 15px;
+            align-items: center;
         }
 
-        .payment-choice-card {
-            background: rgba(3, 8, 17, 0.7);
+        /* DYNAMIC QR CONTAINER ENCLOSING STYLED CANVAS/IMAGE */
+        #qrcode-container {
+            position: relative;
+            background: #ffffff;
+            padding: 14px;
+            border-radius: 16px;
+            box-shadow: 0 0 25px rgba(0, 217, 255, 0.4);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 210px;
+            min-height: 210px;
+        }
+
+        #qrcode-container img, #qrcode-container canvas {
+            display: block;
+            max-width: 190px;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .locked-amount-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 255, 102, 0.15);
+            color: #00FF66;
+            border: 1px solid #00FF66;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-family: var(--font-head);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .verify-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        .verify-input {
+            width: 100%;
+            background: rgba(3, 8, 17, 0.9);
+            border: 1px solid var(--primary-cyan);
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: #fff;
+            font-family: var(--font-head);
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .verify-input:focus {
+            outline: none;
+            box-shadow: 0 0 15px var(--cyan-glow);
+        }
+
+        /* ================= MY ORDERS DRAWER ================= */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 2500;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .orders-drawer {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            background: rgba(3, 8, 17, 0.95);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border-glass);
+            z-index: 2600;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+        }
+
+        .drawer-overlay.active .orders-drawer {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .drawer-title {
+            font-family: var(--font-head);
+            font-size: 1.3rem;
+            color: var(--primary-cyan);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .drawer-body {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .order-item-card {
+            background: rgba(8, 21, 41, 0.8);
             border: 1px solid var(--border-glass);
             border-radius: 10px;
             padding: 15px;
-            text-align: center;
         }
 
-        /* Toast notification for copy */
+        .order-item-header {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-head);
+            font-size: 0.9rem;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .order-status {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: rgba(0, 255, 102, 0.15);
+            color: #00FF66;
+            border: 1px solid #00FF66;
+            text-transform: uppercase;
+        }
+
+        .order-item-details {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+        }
+
+        .order-txid {
+            background: rgba(3, 8, 17, 0.8);
+            border: 1px solid var(--border-glass);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--text-cyan);
+            word-break: break-all;
+            margin-top: 8px;
+        }
+
+        .empty-orders {
+            text-align: center;
+            color: var(--text-sub);
+            margin: auto 0;
+            font-size: 0.95rem;
+        }
+
+        /* Toast notification */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -929,9 +995,6 @@
             .hero-subtitle {
                 font-size: 1.3rem;
             }
-            .form-row {
-                grid-template-columns: 1fr;
-            }
         }
 
         @media (max-width: 768px) {
@@ -954,7 +1017,7 @@
             .nav-links.active {
                 left: 0;
             }
-            .products-grid, .steps-grid, .payment-grid {
+            .products-grid, .steps-grid {
                 grid-template-columns: 1fr;
             }
             .hero-cta {
@@ -975,18 +1038,23 @@
         <a href="#" class="nav-brand">
             <i class="fa-solid fa-water"></i> SANDY SHORES
         </a>
-        <div class="hamburger" id="hamburger-btn">
-            <i class="fa-solid fa-bars"></i>
+        
+        <div class="nav-right-container">
+            <button class="my-orders-btn" onclick="openOrdersDrawer()">
+                <i class="fa-solid fa-receipt"></i> MY ORDERS 
+                <span class="orders-badge" id="orders-count">0</span>
+            </button>
+            <div class="hamburger" id="hamburger-btn">
+                <i class="fa-solid fa-bars"></i>
+            </div>
         </div>
+
         <ul class="nav-links" id="nav-menu">
             <li><a href="#home" class="nav-link active">Home</a></li>
             <li><a href="#marketplace" class="nav-link">Marketplace</a></li>
             <li><a href="#about" class="nav-link">About</a></li>
-            <li><a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="nav-link discord-link">Discord</a></li>
+            <li><a href="https://discord.gg/yourinvite" target="_blank" class="nav-link discord-link">Discord</a></li>
         </ul>
-        <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="btn-glow discord-btn" style="padding: 8px 18px; font-size: 0.85rem;">
-            <i class="fa-brands fa-discord"></i> JOIN DISCORD
-        </a>
     </nav>
 
     <!-- ================= HERO SECTION ================= -->
@@ -1004,7 +1072,7 @@
                 <a href="#marketplace" class="btn-glow">
                     <i class="fa-solid fa-cart-shopping"></i> BROWSE MARKETPLACE
                 </a>
-                <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="btn-outline discord-btn">
+                <a href="https://discord.gg/yourinvite" target="_blank" class="btn-outline discord-btn">
                     <i class="fa-brands fa-discord"></i> JOIN DISCORD
                 </a>
             </div>
@@ -1039,29 +1107,30 @@
                 <div class="step-number">01</div>
                 <div class="step-icon"><i class="fa-solid fa-hand-pointer"></i></div>
                 <h3 class="step-title">01 — CHOOSE</h3>
-                <p style="color: var(--text-sub); font-size: 0.95rem;">Select your desired Fruit, Gamepass, Item, or Account and set your required quantity.</p>
+                <p style="color: var(--text-sub); font-size: 0.95rem;">Select your item and set your desired quantity directly in the marketplace.</p>
             </div>
             <div class="step-card glass-panel">
                 <div class="step-number">02</div>
                 <div class="step-icon"><i class="fa-solid fa-qrcode"></i></div>
-                <h3 class="step-title">02 — LOCK & PAY</h3>
-                <p style="color: var(--text-sub); font-size: 0.95rem;">Click ORDER NOW to lock your price, then select UPI QR Code or UPI App Direct to complete payment directly inside the site.</p>
+                <h3 class="step-title">02 — SCAN & PAY</h3>
+                <p style="color: var(--text-sub); font-size: 0.95rem;">Click ORDER NOW to view payment QR. Scan to pay exact locked amount via UPI.</p>
             </div>
             <div class="step-card glass-panel">
                 <div class="step-number">03</div>
-                <div class="step-icon"><i class="fa-solid fa-circle-check"></i></div>
-                <h3 class="step-title">03 — CONFIRM</h3>
-                <p style="color: var(--text-sub); font-size: 0.95rem;">Join SANDY SHORES Discord and submit your payment receipt to staff for immediate fulfillment.</p>
+                <div class="step-icon"><i class="fa-solid fa-shield-check"></i></div>
+                <h3 class="step-title">03 — VERIFY</h3>
+                <p style="color: var(--text-sub); font-size: 0.95rem;">Enter your Transaction ID under the QR to verify. Your order will save under "My Orders".</p>
             </div>
         </div>
     </section>
+
     <!-- ================= ABOUT & DISCORD CTA ================= -->
     <section id="about" class="about-section">
-        <h2 class="section-title">ABOUT SANDY SHORES</h2>
+        <h2 class="section-title">ABOUT US</h2>
         <p class="section-subtitle">The Premier Blox Fruits Community</p>
 
         <p style="text-align: center; max-width: 800px; margin: 0 auto; color: var(--text-sub);">
-            SANDY SHORES is a dedicated Blox Fruits marketplace community focused on providing fast, reliable, and professional items, accounts, and fruit trading while maintaining an active, safe, and helpful server environment.
+            We are a dedicated Blox Fruits marketplace community focused on providing fast, reliable, and professional items, accounts, and fruit trading while maintaining an active, safe, and helpful server environment.
         </p>
 
         <div class="stats-grid" id="stats-container">
@@ -1071,9 +1140,9 @@
 
     <section class="discord-cta-section">
         <div class="discord-cta-card glass-panel">
-            <h2 class="section-title">FOR MORE INFO!</h2>
-            <p style="color: var(--text-sub); margin-bottom: 25px;">Join SANDY SHORES on Discord and get started with your order ticket now!</p>
-            <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="btn-glow discord-btn">
+            <h2 class="section-title">JOIN OUR COMMUNITY</h2>
+            <p style="color: var(--text-sub); margin-bottom: 25px;">Join our Discord for active giveaways, instant support, and order delivery!</p>
+            <a href="https://discord.gg/yourinvite" target="_blank" class="btn-glow discord-btn">
                 <i class="fa-brands fa-discord"></i> JOIN DISCORD SERVER
             </a>
         </div>
@@ -1086,10 +1155,10 @@
                 <div class="footer-brand"><i class="fa-solid fa-water"></i> SANDY SHORES</div>
                 <p class="footer-desc">Your trusted Blox Fruits marketplace hub.</p>
                 <div class="social-links">
-                    <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="social-icon discord-link"><i class="fa-brands fa-discord"></i></a>
-                    <a href="https://youtube.com/@sandyshores" target="_blank" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="https://instagram.com/sandyshores" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://x.com/sandyshores" target="_blank" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://discord.gg/yourinvite" target="_blank" class="social-icon discord-link"><i class="fa-brands fa-discord"></i></a>
+                    <a href="https://youtube.com" target="_blank" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://instagram.com" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://x.com" target="_blank" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
                 </div>
             </div>
             <div>
@@ -1103,7 +1172,7 @@
             <div>
                 <h4 class="footer-title">Official Discord</h4>
                 <p style="color: var(--text-sub); font-size: 0.9rem; margin-bottom: 10px;">Instant support and order fulfillment:</p>
-                <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="btn-outline discord-btn" style="padding: 8px 15px; font-size: 0.85rem;">
+                <a href="https://discord.gg/yourinvite" target="_blank" class="btn-outline discord-btn" style="padding: 8px 15px; font-size: 0.85rem;">
                     <i class="fa-brands fa-discord"></i> DISCORD SERVER
                 </a>
             </div>
@@ -1111,7 +1180,7 @@
         <div class="footer-bottom">
             <p>© <span id="year"></span> SANDY SHORES. All rights reserved.</p>
             <p style="margin-top: 5px; font-size: 0.75rem; color: #64748B;">
-                SANDY SHORES is an independent community marketplace and is not affiliated with or endorsed by Roblox or Blox Fruits.
+                We are an independent community marketplace and are not affiliated with or endorsed by Roblox or Blox Fruits.
             </p>
         </div>
     </footer>
@@ -1120,7 +1189,7 @@
     <div class="modal-overlay" id="order-modal">
         <div class="modal-card glass-panel">
             <button class="modal-close" onclick="closeModal()">&times;</button>
-            <h3 class="modal-title"><i class="fa-solid fa-lock"></i> PRICE LOCKED - CHOOSE PAYMENT</h3>
+            <h3 class="modal-title"><i class="fa-solid fa-qrcode"></i> SCAN QR TO PAY</h3>
             
             <div class="modal-summary">
                 <div class="summary-row">
@@ -1128,75 +1197,64 @@
                     <strong id="modal-product-name">-</strong>
                 </div>
                 <div class="summary-row">
-                    <span>Category:</span>
-                    <span id="modal-category">-</span>
-                </div>
-                <div class="summary-row">
-                    <span>Price Each:</span>
-                    <span id="modal-unit-price">-</span>
-                </div>
-                <div class="summary-row">
-                    <span>Selected Quantity:</span>
-                    <strong id="modal-qty" style="color: var(--primary-cyan);">-</strong>
+                    <span>Quantity:</span>
+                    <span id="modal-qty">-</span>
                 </div>
                 <div class="summary-row total">
-                    <span>LOCKED TOTAL PRICE:</span>
+                    <span>TOTAL AMOUNT:</span>
                     <span id="modal-total-price">₹0</span>
                 </div>
             </div>
 
-            <p style="font-size: 0.85rem; color: var(--text-sub); text-align: center; margin-bottom: 10px;">
-                Complete your payment using one of the options below:
-            </p>
-
-            <div class="modal-payment-options">
-                <!-- Option 1: QR Code display -->
-                <div class="payment-choice-card">
-                    <h4 style="font-family: var(--font-head); font-size: 1rem; color: var(--primary-cyan); margin-bottom: 10px;">
-                        OPTION 1: SCAN QR CODE
-                    </h4>
-                    <div style="width: 160px; height: 160px; background: #fff; padding: 8px; border-radius: 8px; margin: 0 auto 10px auto;">
-                        <img src="https://cdn.discordapp.com/attachments/1469933331364974623/1549409149023166655/Picsart_26-09-15_18-48-30-596.png?ex=6aaa9737&is=6aa945b7&hm=5ba7dd9dbb7f5bbeeef57791f9a947e4a02731e7de270685c4fe42563344275c&" alt="SANDY SHORES UPI QR Code" style="width: 100%; height: 100%; object-fit: contain; display: block;">
-                    </div>
-                    <div style="font-family: var(--font-head); font-size: 0.9rem; color: #fff; margin-bottom: 8px;">
-                        Pay Exactly: <span id="qr-locked-price" style="color: var(--primary-cyan); font-weight: bold;">₹0</span>
-                    </div>
-                    <button class="btn-outline" onclick="copyUpiId()" style="width: 100%; padding: 8px 12px; font-size: 0.85rem;">
-                        <i class="fa-regular fa-copy"></i> COPY UPI ID (sandy6996@ybl)
-                    </button>
+            <!-- DYNAMIC PRICE-LOCKED UPI QR DISPLAY BOX -->
+            <div class="qr-display-box">
+                <div class="locked-amount-badge">
+                    <i class="fa-solid fa-lock"></i> Amount Locked: <span id="locked-badge-amount">₹0</span>
                 </div>
-
-                <!-- Option 2: UPI Apps Redirect -->
-                <div class="payment-choice-card">
-                    <h4 style="font-family: var(--font-head); font-size: 1rem; color: var(--primary-cyan); margin-bottom: 10px;">
-                        OPTION 2: PAY WITH UPI APP
-                    </h4>
-                    <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 12px;">
-                        Opens GPay, PhonePe, Paytm or BHIM with locked price <strong id="app-locked-price" style="color: #fff;">₹0</strong> auto-filled.
-                    </p>
-                    <button class="btn-glow" onclick="payViaModalIntent()" style="width: 100%;">
-                        <i class="fa-solid fa-bolt"></i> PAY VIA UPI APP NOW
-                    </button>
-                </div>
+                <!-- Dynamic QR Canvas Rendered via UPI Deep Link Payload -->
+                <div id="qrcode-container"></div>
+                <p style="font-size: 0.85rem; color: var(--text-cyan); margin-top: 5px;">
+                    Scan with GPay, PhonePe, Paytm, BHIM (UPI link locks amount automatically)
+                </p>
             </div>
 
-            <div style="margin-top: 20px; text-align: center;">
-                <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="btn-outline discord-btn" style="width: 100%; justify-content: center;">
-                    <i class="fa-brands fa-discord"></i> CONFIRM PAYMENT ON DISCORD
-                </a>
+            <!-- VERIFY TRANSACTION ID SECTION -->
+            <div class="verify-box">
+                <label style="font-family: var(--font-head); font-size: 0.85rem; color: var(--text-sub);">
+                    <i class="fa-solid fa-key"></i> VERIFY TRANSACTION ID
+                </label>
+                <input type="text" id="txid-input" class="verify-input" placeholder="Enter 12-digit UTR / Txn ID after payment">
+                <button class="btn-glow" style="width: 100%; justify-content: center;" onclick="verifyAndSubmitOrder()">
+                    <i class="fa-solid fa-circle-check"></i> VERIFY & SUBMIT ORDER
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MY ORDERS DRAWER ================= -->
+    <div class="drawer-overlay" id="drawer-overlay" onclick="closeOrdersDrawer()">
+        <div class="orders-drawer" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <div class="drawer-title">
+                    <i class="fa-solid fa-receipt"></i> MY ORDERS
+                </div>
+                <button class="modal-close" style="position: static;" onclick="closeOrdersDrawer()">&times;</button>
+            </div>
+            <div class="drawer-body" id="orders-list">
+                <!-- Dynamically populated orders -->
             </div>
         </div>
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast" class="toast">✓ UPI ID COPIED TO CLIPBOARD</div>
+    <div id="toast" class="toast">✓ ORDER SUBMITTED SUCCESSFULLY</div>
 
     <!-- ================= JAVASCRIPT ================= -->
     <script>
         // ================= CONFIGURATION =================
-        const DISCORD_INVITE = "https://discord.gg/FtCe5nPMN2";
-        const UPI_ID = "sandy6996@ybl";
-        const UPI_NAME = "SANDY SHORES";
+        const DISCORD_INVITE = "https://discord.gg/yourinvite";
+        const MERCHANT_UPI_ID = "sandy6996@ybl"; 
+        const MERCHANT_NAME = "SANDY SHORES";
 
         const STATS_DATA = [
             { number: "500+", label: "Members" },
@@ -1262,8 +1320,35 @@
                 availability: "In Stock"
             },
             {
+                id: 7,
+                name: "Tushita Sword Unlock",
+                category: "Items",
+                price: 250,
+                description: "Complete puzzle quest carry to obtain the Tushita sword.",
+                image: "https://via.placeholder.com/200/081529/00D9FF?text=Tushita",
+                availability: "In Stock"
+            },
+            {
+                id: 8,
+                name: "Yama Sword Unlock",
+                category: "Items",
+                price: 200,
+                description: "Elite hunter quest carry to claim the cursed Yama blade.",
+                image: "https://via.placeholder.com/200/081529/00D9FF?text=Yama",
+                availability: "In Stock"
+            },
+            {
+                id: 9,
+                name: "Hallow Scythe Service",
+                category: "Items",
+                price: 300,
+                description: "Soul Reaper summon and kill carry for Scythe drop.",
+                image: "https://via.placeholder.com/200/081529/00D9FF?text=Hallow+Scythe",
+                availability: "In Stock"
+            },
+            {
                 id: 10,
-                name: "Max Level BloxFRUITS Account",
+                name: "Max Level Blox Account",
                 category: "Accounts",
                 price: 1200,
                 description: "Max level account loaded with Godhuman, Soul Guitar & Melees.",
@@ -1273,28 +1358,19 @@
         ];
 
         let activeModalProduct = null;
+        let qrCodeInstance = null;
+        let myOrders = JSON.parse(localStorage.getItem("my_store_orders") || "[]");
 
-        // ================= INITIALIZATION =================
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("year").textContent = new Date().getFullYear();
-            updateDiscordLinks();
-            renderProducts("All");
-            setupFilters();
-            renderStats();
-            populateOrderFormOptions();
-            initOceanCanvas();
-            setupMobileNav();
-        });
-
+        // ================= GLOBAL EVENT HANDLERS =================
         function updateDiscordLinks() {
             document.querySelectorAll(".discord-btn, .discord-link").forEach(btn => {
                 btn.href = DISCORD_INVITE;
             });
         }
 
-        // ================= MARKETPLACE FUNCTIONS =================
         function renderProducts(filterCategory) {
             const container = document.getElementById("products-container");
+            if (!container) return;
             container.innerHTML = "";
 
             const filtered = filterCategory === "All" 
@@ -1341,7 +1417,6 @@
             });
         }
 
-        // ================= QUANTITY CALCULATOR =================
         function adjustQty(productId, change) {
             const input = document.getElementById(`qty-${productId}`);
             const totalDisplay = document.getElementById(`total-${productId}`);
@@ -1358,10 +1433,30 @@
             totalDisplay.textContent = `₹${calculatedTotal.toLocaleString('en-IN')}`;
         }
 
-        // ================= MODAL & PRICE LOCKING =================
+        // ================= DYNAMIC UPI PRICE LOCK GENERATOR =================
+        function generateLockedUPIQRCode(upiId, merchantName, amount, note) {
+            const container = document.getElementById("qrcode-container");
+            container.innerHTML = "";
+
+            // Standard UPI Deep Link specification with locked amount (am) & currency (cu)
+            const upiString = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(merchantName)}&am=${amount.toFixed(2)}&cu=INR&tn=${encodeURIComponent(note)}`;
+
+            qrCodeInstance = new QRCode(container, {
+                text: upiString,
+                width: 190,
+                height: 190,
+                colorDark: "#030811",
+                colorLight: "#FFFFFF",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
         function openOrderModal(productId) {
             const product = PRODUCTS_DATA.find(p => p.id === productId);
-            const qty = parseInt(document.getElementById(`qty-${productId}`).value) || 1;
+            if (!product) return;
+
+            const qtyInput = document.getElementById(`qty-${productId}`);
+            const qty = qtyInput ? (parseInt(qtyInput.value) || 1) : 1;
             const lockedTotal = product.price * qty;
 
             activeModalProduct = { 
@@ -1371,14 +1466,16 @@
             };
 
             document.getElementById("modal-product-name").textContent = product.name;
-            document.getElementById("modal-category").textContent = product.category;
-            document.getElementById("modal-unit-price").textContent = `₹${product.price}`;
             document.getElementById("modal-qty").textContent = qty;
             
             const formattedTotal = `₹${lockedTotal.toLocaleString('en-IN')}`;
             document.getElementById("modal-total-price").textContent = formattedTotal;
-            document.getElementById("qr-locked-price").textContent = formattedTotal;
-            document.getElementById("app-locked-price").textContent = formattedTotal;
+            document.getElementById("locked-badge-amount").textContent = formattedTotal;
+            document.getElementById("txid-input").value = "";
+
+            // Dynamic generation of price-locked QR string payload
+            const paymentNote = `${product.name} x${qty}`;
+            generateLockedUPIQRCode(MERCHANT_UPI_ID, MERCHANT_NAME, lockedTotal, paymentNote);
 
             document.getElementById("order-modal").classList.add("active");
         }
@@ -1386,56 +1483,77 @@
         function closeModal() {
             document.getElementById("order-modal").classList.remove("active");
         }
-        // ================= UPI PAYMENTS =================
-        function buildUpiUrl(amount, productName, quantity) {
-            const params = new URLSearchParams({
-                pa: UPI_ID,
-                pn: UPI_NAME,
-                am: Number(amount).toFixed(2),
-                cu: "INR",
-                tn: `${productName} x${quantity}`
-            });
-            return `upi://pay?${params.toString()}`;
-        }
 
-        function openUpiApp(amount, productName, quantity) {
-            const upiUrl = buildUpiUrl(amount, productName, quantity);
-            let appOpened = false;
+        function verifyAndSubmitOrder() {
+            const txId = document.getElementById("txid-input").value.trim();
+            if (!txId) {
+                alert("Please enter your Payment Transaction ID / UTR before verifying.");
+                return;
+            }
 
-            const markOpened = () => {
-                appOpened = true;
-            };
-
-            window.addEventListener("blur", markOpened, { once: true });
-            document.addEventListener("visibilitychange", () => {
-                if (document.hidden) markOpened();
-            }, { once: true });
-
-            window.location.href = upiUrl;
-
-            setTimeout(() => {
-                if (!appOpened) {
-                    showToast("⚠️ No UPI app opened. Copy the UPI ID and pay manually.");
-                }
-            }, 1800);
-        }
-
-        function payViaModalIntent() {
             if (!activeModalProduct) return;
 
-            const amount = activeModalProduct.calculatedTotal;
-            openUpiApp(
-                amount,
-                activeModalProduct.name,
-                activeModalProduct.selectedQty
-            );
+            const newOrder = {
+                id: 'ORD-' + Math.floor(100000 + Math.random() * 900000),
+                name: activeModalProduct.name,
+                qty: activeModalProduct.selectedQty,
+                total: activeModalProduct.calculatedTotal,
+                txId: txId,
+                status: 'Under Verification',
+                date: new Date().toLocaleDateString()
+            };
+
+            myOrders.unshift(newOrder);
+            localStorage.setItem("my_store_orders", JSON.stringify(myOrders));
+            
+            updateOrdersUI();
+            closeModal();
+            showToast("✓ ORDER SUBMITTED & VERIFICATION PENDING");
+            openOrdersDrawer();
         }
 
-        function copyUpiId() {
-            navigator.clipboard.writeText(UPI_ID).then(() => {
-                showToast("✓ UPI ID COPIED TO CLIPBOARD");
-            }).catch(() => {
-                showToast("⚠️ COPY FAILED. UPI ID: " + UPI_ID);
+        function openOrdersDrawer() {
+            document.getElementById("drawer-overlay").classList.add("active");
+        }
+
+        function closeOrdersDrawer() {
+            document.getElementById("drawer-overlay").classList.remove("active");
+        }
+
+        function updateOrdersUI() {
+            const countEl = document.getElementById("orders-count");
+            if (countEl) countEl.textContent = myOrders.length;
+
+            const listEl = document.getElementById("orders-list");
+            if (!listEl) return;
+
+            if (myOrders.length === 0) {
+                listEl.innerHTML = `
+                    <div class="empty-orders">
+                        <i class="fa-solid fa-box-open" style="font-size: 2.5rem; margin-bottom: 10px; color: var(--border-glow);"></i>
+                        <p>No orders placed yet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listEl.innerHTML = "";
+            myOrders.forEach(ord => {
+                const card = document.createElement("div");
+                card.className = "order-item-card";
+                card.innerHTML = `
+                    <div class="order-item-header">
+                        <span>${ord.name} (x${ord.qty})</span>
+                        <span class="order-status">${ord.status}</span>
+                    </div>
+                    <div class="order-item-details">
+                        Total Amount: <strong style="color: var(--primary-cyan)">₹${ord.total.toLocaleString('en-IN')}</strong> | Date: ${ord.date}
+                    </div>
+                    <div class="order-txid">
+                        <i class="fa-solid fa-hashtag"></i> Txn ID: ${ord.txId}
+                    </div>
+                `;
+                listEl.appendChild(card);
             });
         }
 
@@ -1448,9 +1566,9 @@
             }, 3000);
         }
 
-        // ================= ABOUT & STATS =================
         function renderStats() {
             const container = document.getElementById("stats-container");
+            if (!container) return;
             container.innerHTML = "";
             STATS_DATA.forEach(s => {
                 const div = document.createElement("div");
@@ -1463,10 +1581,10 @@
             });
         }
 
-        // ================= MOBILE NAVIGATION =================
         function setupMobileNav() {
             const hamburger = document.getElementById("hamburger-btn");
             const navMenu = document.getElementById("nav-menu");
+            if (!hamburger || !navMenu) return;
 
             hamburger.addEventListener("click", () => {
                 navMenu.classList.toggle("active");
@@ -1479,9 +1597,10 @@
             });
         }
 
-        // ================= ANIMATED OCEAN CANVAS =================
+        // ================= OCEANIC CANVAS ANIMATION =================
         function initOceanCanvas() {
             const canvas = document.getElementById("ocean-canvas");
+            if (!canvas) return;
             const ctx = canvas.getContext("2d");
 
             let width = canvas.width = window.innerWidth;
@@ -1493,21 +1612,43 @@
             });
 
             const particles = [];
-            const particleCount = 40;
-
+            const particleCount = 45;
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    radius: Math.random() * 3 + 1,
+                    radius: Math.random() * 3.5 + 1,
                     alpha: Math.random() * 0.5 + 0.2,
-                    speedY: Math.random() * -0.8 - 0.2,
+                    speedY: Math.random() * -0.7 - 0.2,
                     speedX: Math.random() * 0.4 - 0.2
                 });
             }
 
+            let step = 0;
+            const waves = [
+                { length: 0.005, amplitude: 35, speed: 0.015, color: "rgba(0, 217, 255, 0.06)" },
+                { length: 0.008, amplitude: 25, speed: 0.02,  color: "rgba(0, 136, 204, 0.08)" },
+                { length: 0.003, amplitude: 50, speed: 0.01,  color: "rgba(121, 40, 202, 0.04)" }
+            ];
+
             function animate() {
                 ctx.clearRect(0, 0, width, height);
+
+                step += 1;
+                waves.forEach(wave => {
+                    ctx.beginPath();
+                    ctx.moveTo(0, height);
+
+                    for (let x = 0; x <= width; x += 10) {
+                        const y = Math.sin(x * wave.length + step * wave.speed) * wave.amplitude + (height * 0.75);
+                        ctx.lineTo(x, y);
+                    }
+
+                    ctx.lineTo(width, height);
+                    ctx.closePath();
+                    ctx.fillStyle = wave.color;
+                    ctx.fill();
+                });
 
                 particles.forEach(p => {
                     p.y += p.speedY;
@@ -1521,7 +1662,7 @@
                     ctx.beginPath();
                     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
                     ctx.fillStyle = `rgba(0, 217, 255, ${p.alpha})`;
-                    ctx.shadowBlur = 10;
+                    ctx.shadowBlur = 12;
                     ctx.shadowColor = "#00D9FF";
                     ctx.fill();
                 });
@@ -1531,6 +1672,20 @@
 
             animate();
         }
+
+        // ================= INITIALIZATION =================
+        document.addEventListener("DOMContentLoaded", () => {
+            const yearEl = document.getElementById("year");
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            updateDiscordLinks();
+            renderProducts("All");
+            setupFilters();
+            renderStats();
+            updateOrdersUI();
+            initOceanCanvas();
+            setupMobileNav();
+        });
     </script>
 </body>
 </html>
