@@ -10,8 +10,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-    <!-- QRCode.js Library for Dynamic Price-Locked QR Code Generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
         /* ================= CSS VARIABLES & PALETTE ================= */
@@ -779,45 +777,19 @@
             padding: 20px;
             text-align: center;
             margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
-        /* DYNAMIC QR CONTAINER ENCLOSING STYLED CANVAS/IMAGE */
-        #qrcode-container {
-            position: relative;
-            background: #ffffff;
-            padding: 14px;
-            border-radius: 16px;
-            box-shadow: 0 0 25px rgba(0, 217, 255, 0.4);
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-width: 210px;
-            min-height: 210px;
-        }
-
-        #qrcode-container img, #qrcode-container canvas {
-            display: block;
-            max-width: 190px;
+        .custom-qr-img {
+            width: 220px;
             height: auto;
-            border-radius: 6px;
-        }
-
-        .locked-amount-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(0, 255, 102, 0.15);
-            color: #00FF66;
-            border: 1px solid #00FF66;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-family: var(--font-head);
-            font-size: 0.85rem;
-            margin-bottom: 8px;
+            max-height: 250px;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+            background: #fff;
+            padding: 8px;
+            margin: 0 auto 15px auto;
+            display: block;
         }
 
         .verify-box {
@@ -1053,7 +1025,7 @@
             <li><a href="#home" class="nav-link active">Home</a></li>
             <li><a href="#marketplace" class="nav-link">Marketplace</a></li>
             <li><a href="#about" class="nav-link">About</a></li>
-            <li><a href="https://discord.gg/yourinvite" target="_blank" class="nav-link discord-link">Discord</a></li>
+            <li><a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="nav-link discord-link">Discord</a></li>
         </ul>
     </nav>
 
@@ -1072,7 +1044,7 @@
                 <a href="#marketplace" class="btn-glow">
                     <i class="fa-solid fa-cart-shopping"></i> BROWSE MARKETPLACE
                 </a>
-                <a href="https://discord.gg/yourinvite" target="_blank" class="btn-outline discord-btn">
+                <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="btn-outline discord-btn">
                     <i class="fa-brands fa-discord"></i> JOIN DISCORD
                 </a>
             </div>
@@ -1113,7 +1085,7 @@
                 <div class="step-number">02</div>
                 <div class="step-icon"><i class="fa-solid fa-qrcode"></i></div>
                 <h3 class="step-title">02 — SCAN & PAY</h3>
-                <p style="color: var(--text-sub); font-size: 0.95rem;">Click ORDER NOW to view payment QR. Scan to pay exact locked amount via UPI.</p>
+                <p style="color: var(--text-sub); font-size: 0.95rem;">Click ORDER NOW to open payment QR. Scan and pay the exact locked total price.</p>
             </div>
             <div class="step-card glass-panel">
                 <div class="step-number">03</div>
@@ -1126,11 +1098,11 @@
 
     <!-- ================= ABOUT & DISCORD CTA ================= -->
     <section id="about" class="about-section">
-        <h2 class="section-title">ABOUT US</h2>
+        <h2 class="section-title">ABOUT SANDY SHORES</h2>
         <p class="section-subtitle">The Premier Blox Fruits Community</p>
 
         <p style="text-align: center; max-width: 800px; margin: 0 auto; color: var(--text-sub);">
-            We are a dedicated Blox Fruits marketplace community focused on providing fast, reliable, and professional items, accounts, and fruit trading while maintaining an active, safe, and helpful server environment.
+            SANDY SHORES is a dedicated Blox Fruits marketplace community focused on providing fast, reliable, and professional items, accounts, and fruit trading while maintaining an active, safe, and helpful server environment.
         </p>
 
         <div class="stats-grid" id="stats-container">
@@ -1141,8 +1113,8 @@
     <section class="discord-cta-section">
         <div class="discord-cta-card glass-panel">
             <h2 class="section-title">JOIN OUR COMMUNITY</h2>
-            <p style="color: var(--text-sub); margin-bottom: 25px;">Join our Discord for active giveaways, instant support, and order delivery!</p>
-            <a href="https://discord.gg/yourinvite" target="_blank" class="btn-glow discord-btn">
+            <p style="color: var(--text-sub); margin-bottom: 25px;">Join SANDY SHORES on Discord for active giveaways, instant support, and order delivery!</p>
+            <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="btn-glow discord-btn">
                 <i class="fa-brands fa-discord"></i> JOIN DISCORD SERVER
             </a>
         </div>
@@ -1155,10 +1127,10 @@
                 <div class="footer-brand"><i class="fa-solid fa-water"></i> SANDY SHORES</div>
                 <p class="footer-desc">Your trusted Blox Fruits marketplace hub.</p>
                 <div class="social-links">
-                    <a href="https://discord.gg/yourinvite" target="_blank" class="social-icon discord-link"><i class="fa-brands fa-discord"></i></a>
-                    <a href="https://youtube.com" target="_blank" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="https://instagram.com" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="https://x.com" target="_blank" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="social-icon discord-link"><i class="fa-brands fa-discord"></i></a>
+                    <a href="https://youtube.com/@sandyshores" target="_blank" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://instagram.com/sandyshores" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://x.com/sandyshores" target="_blank" class="social-icon"><i class="fa-brands fa-x-twitter"></i></a>
                 </div>
             </div>
             <div>
@@ -1172,7 +1144,7 @@
             <div>
                 <h4 class="footer-title">Official Discord</h4>
                 <p style="color: var(--text-sub); font-size: 0.9rem; margin-bottom: 10px;">Instant support and order fulfillment:</p>
-                <a href="https://discord.gg/yourinvite" target="_blank" class="btn-outline discord-btn" style="padding: 8px 15px; font-size: 0.85rem;">
+                <a href="https://discord.gg/FtCe5nPMN2" target="_blank" class="btn-outline discord-btn" style="padding: 8px 15px; font-size: 0.85rem;">
                     <i class="fa-brands fa-discord"></i> DISCORD SERVER
                 </a>
             </div>
@@ -1180,7 +1152,7 @@
         <div class="footer-bottom">
             <p>© <span id="year"></span> SANDY SHORES. All rights reserved.</p>
             <p style="margin-top: 5px; font-size: 0.75rem; color: #64748B;">
-                We are an independent community marketplace and are not affiliated with or endorsed by Roblox or Blox Fruits.
+                SANDY SHORES is an independent community marketplace and is not affiliated with or endorsed by Roblox or Blox Fruits.
             </p>
         </div>
     </footer>
@@ -1201,21 +1173,15 @@
                     <span id="modal-qty">-</span>
                 </div>
                 <div class="summary-row total">
-                    <span>TOTAL AMOUNT:</span>
+                    <span>LOCKED AMOUNT:</span>
                     <span id="modal-total-price">₹0</span>
                 </div>
             </div>
 
-            <!-- DYNAMIC PRICE-LOCKED UPI QR DISPLAY BOX -->
+            <!-- PAYMENT QR IMAGE CONTAINER -->
             <div class="qr-display-box">
-                <div class="locked-amount-badge">
-                    <i class="fa-solid fa-lock"></i> Amount Locked: <span id="locked-badge-amount">₹0</span>
-                </div>
-                <!-- Dynamic QR Canvas Rendered via UPI Deep Link Payload -->
-                <div id="qrcode-container"></div>
-                <p style="font-size: 0.85rem; color: var(--text-cyan); margin-top: 5px;">
-                    Scan with GPay, PhonePe, Paytm, BHIM (UPI link locks amount automatically)
-                </p>
+                <img src="https://cdn.discordapp.com/attachments/1469933331364974623/1549409149023166655/Picsart_26-09-15_18-48-30-596.png?ex=6aabe8b7&is=6aaa9737&hm=6f0120eb4c1cb5a3d187003c13ca0b0eab1e6efd51225d5f671125fdcbd3e7c3&" alt="Payment QR Code" class="custom-qr-img">
+                <p style="font-size: 0.85rem; color: var(--text-cyan);">Scan with any UPI App (GPay, PhonePe, Paytm, BHIM)</p>
             </div>
 
             <!-- VERIFY TRANSACTION ID SECTION -->
@@ -1252,9 +1218,7 @@
     <!-- ================= JAVASCRIPT ================= -->
     <script>
         // ================= CONFIGURATION =================
-        const DISCORD_INVITE = "https://discord.gg/yourinvite";
-        const MERCHANT_UPI_ID = "sandy6996@ybl"; 
-        const MERCHANT_NAME = "SANDY SHORES";
+        const DISCORD_INVITE = "https://discord.gg/FtCe5nPMN2";
 
         const STATS_DATA = [
             { number: "500+", label: "Members" },
@@ -1358,8 +1322,7 @@
         ];
 
         let activeModalProduct = null;
-        let qrCodeInstance = null;
-        let myOrders = JSON.parse(localStorage.getItem("my_store_orders") || "[]");
+        let myOrders = JSON.parse(localStorage.getItem("sandy_shores_orders") || "[]");
 
         // ================= GLOBAL EVENT HANDLERS =================
         function updateDiscordLinks() {
@@ -1433,24 +1396,6 @@
             totalDisplay.textContent = `₹${calculatedTotal.toLocaleString('en-IN')}`;
         }
 
-        // ================= DYNAMIC UPI PRICE LOCK GENERATOR =================
-        function generateLockedUPIQRCode(upiId, merchantName, amount, note) {
-            const container = document.getElementById("qrcode-container");
-            container.innerHTML = "";
-
-            // Standard UPI Deep Link specification with locked amount (am) & currency (cu)
-            const upiString = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(merchantName)}&am=${amount.toFixed(2)}&cu=INR&tn=${encodeURIComponent(note)}`;
-
-            qrCodeInstance = new QRCode(container, {
-                text: upiString,
-                width: 190,
-                height: 190,
-                colorDark: "#030811",
-                colorLight: "#FFFFFF",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-        }
-
         function openOrderModal(productId) {
             const product = PRODUCTS_DATA.find(p => p.id === productId);
             if (!product) return;
@@ -1470,12 +1415,7 @@
             
             const formattedTotal = `₹${lockedTotal.toLocaleString('en-IN')}`;
             document.getElementById("modal-total-price").textContent = formattedTotal;
-            document.getElementById("locked-badge-amount").textContent = formattedTotal;
             document.getElementById("txid-input").value = "";
-
-            // Dynamic generation of price-locked QR string payload
-            const paymentNote = `${product.name} x${qty}`;
-            generateLockedUPIQRCode(MERCHANT_UPI_ID, MERCHANT_NAME, lockedTotal, paymentNote);
 
             document.getElementById("order-modal").classList.add("active");
         }
@@ -1504,7 +1444,7 @@
             };
 
             myOrders.unshift(newOrder);
-            localStorage.setItem("my_store_orders", JSON.stringify(myOrders));
+            localStorage.setItem("sandy_shores_orders", JSON.stringify(myOrders));
             
             updateOrdersUI();
             closeModal();
