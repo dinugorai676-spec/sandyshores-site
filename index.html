@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SANDY SHORES — Premium Blox Fruits Marketplace</title>
-  <meta name="description" content="Premium Blox Fruits marketplace with Firebase Authentication and private dashboard access." />
+  <meta name="description" content="Premium Blox Fruits marketplace with Firebase Authentication, persistent login, Firestore order management, and live 1-on-1 order chat." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -79,7 +79,7 @@
       height: 73px;
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 20px;
     }
 
     .brand {
@@ -101,6 +101,7 @@
     .navlinks a {
       color: var(--muted);
       text-decoration: none;
+      font-weight: 600;
     }
 
     .navlinks a:hover { color: var(--cyan); }
@@ -113,12 +114,19 @@
 
     .orders {
       border: 1px solid var(--cyan);
-      padding: 9px 14px;
+      padding: 8px 14px;
       border-radius: 8px;
-      background: transparent;
+      background: rgba(0, 217, 255, 0.08);
       color: var(--cyan);
       text-decoration: none;
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .orders:hover {
+      background: rgba(0, 217, 255, 0.18);
     }
 
     .badge {
@@ -127,15 +135,39 @@
       background: var(--cyan);
       color: #00202a;
       border-radius: 99px;
-      min-width: 19px;
-      height: 19px;
-      margin-left: 5px;
-      font-size: 12px;
+      min-width: 20px;
+      height: 20px;
+      font-size: 11px;
+      font-family: Orbitron, sans-serif;
+      font-weight: 800;
+    }
+
+    .role-toggle {
+      border: 1px solid var(--amber);
+      padding: 7px 11px;
+      border-radius: 8px;
+      background: rgba(255, 186, 8, 0.1);
+      color: var(--amber);
+      font-family: Orbitron, sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all .2s ease;
+    }
+
+    .role-toggle.active {
+      background: var(--amber);
+      color: #00202a;
+      box-shadow: 0 0 12px rgba(255, 186, 8, 0.4);
     }
 
     .logout-btn {
       border: 1px solid rgba(255, 77, 118, .45);
-      padding: 9px 14px;
+      padding: 8px 14px;
       border-radius: 8px;
       background: rgba(255, 77, 118, .08);
       color: #ff6b8b;
@@ -143,9 +175,6 @@
       font: 700 15px Rajdhani, sans-serif;
       letter-spacing: .5px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
       transition: all .2s ease;
     }
 
@@ -166,6 +195,7 @@
       font-family: Orbitron;
       font-size: 12px;
       letter-spacing: 4px;
+      font-weight: 700;
     }
 
     .hero h1 {
@@ -192,6 +222,8 @@
       background: linear-gradient(135deg, var(--cyan), #3185ff);
       color: #00111b;
       text-decoration: none;
+      font-family: Orbitron;
+      font-weight: 700;
       box-shadow: 0 0 25px rgba(0, 217, 255, .28);
     }
 
@@ -248,12 +280,14 @@
       color: var(--muted);
       padding: 7px 15px;
       border-radius: 99px;
+      transition: all .2s ease;
     }
 
     .filter.active, .filter:hover {
       background: var(--cyan);
       color: #00202a;
       border-color: var(--cyan);
+      box-shadow: 0 0 12px rgba(0, 217, 255, 0.3);
     }
 
     .products {
@@ -267,6 +301,9 @@
       border-radius: 14px;
       overflow: hidden;
       padding: 15px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .product-img {
@@ -283,6 +320,7 @@
       font-size: 13px;
       letter-spacing: 1.5px;
       margin: 14px 0 3px;
+      font-weight: 700;
     }
 
     .product-name {
@@ -349,6 +387,7 @@
       background: linear-gradient(135deg, var(--cyan), #4080ff);
       color: #00111b;
       font: 700 16px Rajdhani, sans-serif;
+      box-shadow: 0 0 15px rgba(0, 217, 255, .25);
     }
 
     .how {
@@ -407,7 +446,8 @@
       position: fixed;
       inset: 0;
       z-index: 30;
-      background: rgba(0, 5, 13, .79);
+      background: rgba(0, 5, 13, .85);
+      backdrop-filter: blur(5px);
       padding: 20px;
       overflow: auto;
     }
@@ -549,6 +589,8 @@
       background: var(--cyan);
       color: #00202a;
       float: right;
+      font-family: Orbitron;
+      font-size: 13px;
     }
 
     .back {
@@ -594,9 +636,10 @@
       margin-top: 5px;
     }
 
+    /* ELDORADO.GG STYLE ORDER CHAT VIEW */
     .order-view {
       display: none;
-      padding: 40px 0 70px;
+      padding: 30px 0 70px;
     }
 
     .order-view.active { display: block; }
@@ -623,6 +666,7 @@
       color: var(--cyan);
       border: 1px solid var(--cyan);
       font-size: 13px;
+      font-family: Orbitron;
     }
 
     .order-layout {
@@ -648,6 +692,7 @@
       justify-content: space-between;
       border-bottom: 1px solid rgba(0, 217, 255, .1);
       padding: 10px 0;
+      font-size: 15px;
     }
 
     .detail span { color: var(--muted); }
@@ -667,76 +712,176 @@
     .chat {
       display: flex;
       flex-direction: column;
-      height: 480px;
+      height: 580px;
+      padding: 0;
+      overflow: hidden;
     }
 
-    .chat-note {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: -5px;
-      margin-bottom: 10px;
+    .chat-header {
+      padding: 14px 20px;
+      background: #061426;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-header h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .live-dot {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--green);
+      font-family: Orbitron;
+      font-size: 11px;
     }
 
     .messages {
       flex: 1;
-      overflow: auto;
-      padding: 8px 0;
+      overflow-y: auto;
+      padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
+      background: rgba(3, 10, 20, 0.6);
     }
 
-    .message {
-      max-width: 78%;
-      padding: 9px 12px;
-      border-radius: 9px;
-      background: #142e4d;
+    .msg-wrap {
+      display: flex;
+      flex-direction: column;
+      max-width: 80%;
+    }
+
+    .msg-wrap.customer {
       align-self: flex-end;
+      align-items: flex-end;
     }
 
-    .message.system {
+    .msg-wrap.owner {
       align-self: flex-start;
+      align-items: flex-start;
+    }
+
+    .msg-wrap.system {
+      align-self: center;
+      align-items: center;
+      max-width: 90%;
+    }
+
+    .msg-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .role-badge {
+      font-family: Orbitron;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .role-badge.owner {
+      background: rgba(255, 186, 8, 0.15);
+      border: 1px solid var(--amber);
+      color: var(--amber);
+    }
+
+    .role-badge.customer {
+      background: rgba(0, 217, 255, 0.15);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+    }
+
+    .message-bubble {
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .msg-wrap.customer .message-bubble {
+      background: #0e2c52;
+      border: 1px solid rgba(0, 217, 255, 0.35);
+      color: #effaff;
+      border-top-right-radius: 2px;
+    }
+
+    .msg-wrap.owner .message-bubble {
+      background: #10233d;
+      border: 1px solid rgba(255, 186, 8, 0.35);
+      color: #effaff;
+      border-top-left-radius: 2px;
+    }
+
+    .msg-wrap.system .message-bubble {
       background: #171d37;
       border: 1px solid rgba(121, 40, 202, .5);
+      font-size: 13px;
+      text-align: center;
     }
 
-    .message small {
-      display: block;
-      opacity: .65;
+    .chat-presets {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 8px 14px;
+      background: #061426;
+      border-top: 1px solid var(--line);
+    }
+
+    .preset-btn {
+      background: #0a1b33;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      padding: 4px 10px;
+      border-radius: 99px;
       font-size: 12px;
-      margin-top: 3px;
+      white-space: nowrap;
+      cursor: pointer;
     }
 
-    .send {
+    .preset-btn:hover {
+      border-color: var(--cyan);
+      background: rgba(0, 217, 255, 0.1);
+    }
+
+    .send-box {
       display: flex;
       gap: 8px;
+      padding: 12px 16px;
+      background: #061426;
       border-top: 1px solid var(--line);
-      padding-top: 12px;
     }
 
-    .send input {
+    .send-box input {
       min-width: 0;
       flex: 1;
       border: 1px solid var(--line);
-      border-radius: 6px;
-      background: #061426;
+      border-radius: 8px;
+      background: #030a14;
       color: #fff;
-      padding: 10px;
+      padding: 10px 14px;
       font: 600 16px Rajdhani;
     }
 
-    .send button {
+    .send-box button {
       border: 0;
-      border-radius: 6px;
-      background: var(--cyan);
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--cyan), #3185ff);
       color: #00202a;
-      padding: 0 14px;
-    }
-
-    .empty {
-      padding: 45px 12px;
-      color: var(--muted);
-      text-align: center;
+      padding: 0 18px;
+      font-family: Orbitron;
+      font-size: 13px;
     }
 
     .orders-panel {
@@ -783,6 +928,8 @@
       color: var(--cyan);
       border-radius: 5px;
       padding: 7px 10px;
+      font-family: Orbitron;
+      font-size: 12px;
     }
 
     .toast {
@@ -805,6 +952,236 @@
     .toast.show {
       transform: translateY(0);
       opacity: 1;
+    }
+
+    /* SELLER ALL ORDERS DASHBOARD */
+    .seller-orders-view {
+      display: none;
+      padding: 30px 0 70px;
+    }
+
+    .seller-orders-view.active {
+      display: block;
+    }
+
+    .seller-banner {
+      background: linear-gradient(135deg, rgba(12, 38, 71, 0.92), rgba(8, 24, 47, 0.92));
+      border: 1px solid rgba(255, 186, 8, 0.4);
+      border-radius: 14px;
+      padding: 24px 28px;
+      margin-bottom: 25px;
+      box-shadow: 0 0 25px rgba(255, 186, 8, 0.12);
+    }
+
+    .seller-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(0, 217, 255, 0.15);
+    }
+
+    .metric-card {
+      background: rgba(3, 10, 20, 0.6);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .metric-card small {
+      display: block;
+      color: var(--muted);
+      font: 700 11px Orbitron;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .metric-card strong {
+      display: block;
+      font: 900 20px Orbitron;
+      color: #fff;
+    }
+
+    .seller-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .seller-search {
+      min-width: 260px;
+      flex: 1;
+      max-width: 400px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #061426;
+      color: #fff;
+      padding: 10px 14px;
+      font: 600 15px Rajdhani;
+    }
+
+    .seller-filters {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .seller-filter-btn {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #061426;
+      color: var(--muted);
+      font: 700 11px Orbitron;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+
+    .seller-filter-btn.active {
+      background: var(--amber);
+      color: #00202a;
+      border-color: var(--amber);
+      box-shadow: 0 0 12px rgba(255, 186, 8, 0.3);
+    }
+
+    .seller-order-card {
+      background: linear-gradient(135deg, rgba(12, 35, 65, 0.92), rgba(7, 22, 43, 0.92));
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: all .2s;
+    }
+
+    .seller-order-card:hover {
+      border-color: rgba(0, 217, 255, 0.5);
+    }
+
+    .seller-card-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid rgba(0, 217, 255, 0.15);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+
+    .seller-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .seller-card-col {
+      background: rgba(3, 10, 20, 0.5);
+      border: 1px solid rgba(0, 217, 255, 0.12);
+      border-radius: 9px;
+      padding: 12px;
+    }
+
+    .seller-card-col span {
+      display: block;
+      color: var(--muted);
+      font: 700 11px Orbitron;
+      margin-bottom: 5px;
+    }
+
+    .seller-status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 99px;
+      font: 700 11px Orbitron;
+      border: 1px solid transparent;
+    }
+
+    .seller-status-badge.submitted {
+      background: rgba(255, 159, 28, 0.15);
+      border-color: #ff9f1c;
+      color: #ff9f1c;
+    }
+
+    .seller-status-badge.verified {
+      background: rgba(0, 217, 255, 0.15);
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .seller-status-badge.delivery {
+      background: rgba(255, 186, 8, 0.15);
+      border-color: var(--amber);
+      color: var(--amber);
+    }
+
+    .seller-status-badge.completed {
+      background: rgba(0, 230, 118, 0.15);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .seller-status-badge.cancelled {
+      background: rgba(255, 77, 118, 0.15);
+      border-color: var(--pink);
+      color: var(--pink);
+    }
+
+    .seller-action-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-top: 1px solid rgba(0, 217, 255, 0.15);
+      padding-top: 14px;
+    }
+
+    .seller-status-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .status-action-btn {
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: #061426;
+      font: 700 11px Orbitron;
+      cursor: pointer;
+      color: #effaff;
+      transition: all .2s;
+    }
+
+    .status-action-btn:hover {
+      border-color: var(--cyan);
+      background: rgba(0, 217, 255, 0.15);
+    }
+
+    .open-chat-btn {
+      padding: 9px 18px;
+      border-radius: 9px;
+      border: none;
+      background: linear-gradient(135deg, var(--cyan), #3185ff);
+      color: #00202a;
+      font: 900 12px Orbitron;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0, 217, 255, 0.35);
+      transition: all .2s;
+    }
+
+    .open-chat-btn:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
     }
 
     /* Auth screen styles */
@@ -915,7 +1292,7 @@
 
   <!-- Loading session indicator -->
   <div id="session-loader" style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--bg); color: var(--ink); font-family: Orbitron, sans-serif;">
-    <div style="font-size: 22px; font-weight: 900; letter-spacing: 2px; color: white; margin-bottom: 10px;">
+    <div style="font-size: 24px; font-weight: 900; letter-spacing: 2px; color: white; margin-bottom: 10px;">
       SANDY <b style="color: var(--cyan)">SHORES</b>
     </div>
     <div style="font-size: 13px; color: var(--cyan); letter-spacing: 2px;">
@@ -928,7 +1305,6 @@
     <canvas id="auth-ocean-canvas"></canvas>
     <div class="auth-container">
       <div class="auth-card">
-        <!-- Logo Header -->
         <div style="text-align: center; margin-bottom: 22px;">
           <div style="font: 900 24px Orbitron, sans-serif; letter-spacing: 3px; color: white; margin-bottom: 6px;">
             SANDY <b style="color: var(--cyan);">SHORES</b>
@@ -938,7 +1314,6 @@
           </div>
         </div>
 
-        <!-- Verification Screen (Shown when email verification is required) -->
         <div id="verification-view" style="display: none; text-align: center;">
           <div style="width: 58px; height: 58px; border-radius: 50%; background: rgba(0, 217, 255, 0.1); border: 1px solid var(--cyan); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 16px;">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -946,88 +1321,60 @@
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
             </svg>
           </div>
-
           <h2 style="font: 700 20px Orbitron, sans-serif; color: white; margin-top: 0; margin-bottom: 12px;">
             VERIFY YOUR EMAIL
           </h2>
-
           <div style="background: rgba(0, 217, 255, 0.05); border: 1px solid var(--line); border-radius: 8px; padding: 16px; margin-bottom: 20px; text-align: left;">
-            <p id="verification-message-text" style="color: #effaff; font-size: 16px; line-height: 1.5; margin: 0;">
-              We have sent you a verification email to <b id="verification-email-display" style="color: var(--cyan); word-break: break-all;"></b>. Please verify it and log in.
+            <p style="color: #effaff; font-size: 16px; line-height: 1.5; margin: 0;">
+              We have sent a verification email to <b id="verification-email-display" style="color: var(--cyan); word-break: break-all;"></b>. Please verify and log in.
             </p>
           </div>
-
-          <div id="resend-status-box" style="display: none; font-size: 14px; margin-bottom: 16px; color: var(--green);"></div>
-
           <button id="verification-login-btn" class="order-btn" style="font-size: 16px; font-weight: 700; letter-spacing: 1px;">
-            LOGIN
+            RETURN TO LOGIN
           </button>
-
-          <div style="margin-top: 20px;">
-            <button id="resend-btn" type="button" style="background: transparent; border: none; color: var(--muted); font-size: 14px; cursor: pointer; text-decoration: underline; font-family: Rajdhani, sans-serif;">
-              Didn't receive the email? Resend verification
-            </button>
-          </div>
         </div>
 
-        <!-- Credentials Form View -->
         <div id="credentials-view">
           <p id="auth-subtitle" style="text-align: center; color: var(--muted); font-size: 15px; margin-top: 0; margin-bottom: 20px;">
-            Sign in to access your dashboard and marketplace
+            Sign in to access your orders and live chat with seller
           </p>
-
-          <!-- Mode Switcher Tabs -->
           <div class="auth-tabs">
             <button type="button" id="tab-signin" class="auth-tab active">SIGN IN</button>
             <button type="button" id="tab-signup" class="auth-tab">REGISTER</button>
           </div>
-
-          <!-- Error Alert Banner -->
           <div id="auth-error-banner" class="auth-error" style="display: none;">
             <span id="auth-error-text"></span>
             <button type="button" id="auth-error-close">×</button>
           </div>
-
           <form id="auth-form">
+            <div class="field" id="roblox-name-field" style="display: none;">
+              <label for="auth-roblox">Roblox Username (Optional)</label>
+              <input type="text" id="auth-roblox" placeholder="e.g. BloxLegend_99" />
+            </div>
             <div class="field">
               <label for="auth-email">Email address</label>
               <input type="email" id="auth-email" placeholder="name@example.com" required autocomplete="email" />
             </div>
-
             <div class="field">
               <label for="auth-password">Password</label>
               <input type="password" id="auth-password" placeholder="••••••••" required autocomplete="current-password" />
             </div>
-
             <div class="field" id="confirm-password-field" style="display: none;">
               <label for="auth-confirm-password">Confirm password</label>
               <input type="password" id="auth-confirm-password" placeholder="••••••••" autocomplete="new-password" />
             </div>
-
             <button id="auth-submit-btn" type="submit" class="order-btn" style="margin-top: 20px; font-size: 16px; font-weight: 700;">
               SIGN IN TO DASHBOARD
             </button>
           </form>
-
-          <!-- Alternative Auth Divider -->
           <div style="display: flex; align-items: center; margin: 18px 0 14px; gap: 12px;">
             <div style="flex: 1; height: 1px; background: var(--line)"></div>
             <span style="color: var(--muted); font-size: 12px; letter-spacing: 2px; font-family: Orbitron, sans-serif;">OR</span>
             <div style="flex: 1; height: 1px; background: var(--line)"></div>
           </div>
-
-          <!-- Continue with Google -->
           <button type="button" id="google-signin-btn" class="google-btn">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.49h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.92c1.71-1.57 2.68-3.89 2.68-6.62Z" fill="#4285F4"/>
-              <path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.26c-.8.54-1.83.87-3.05.87-2.34 0-4.33-1.58-5.04-3.71H.95v2.33C2.43 15.98 5.48 18 9 18Z" fill="#34A853"/>
-              <path d="M3.96 10.72A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.28-1.72V4.95H.95A9.01 9.01 0 0 0 0 9c0 1.45.35 2.82.95 4.05l3.01-2.33Z" fill="#FBBC05"/>
-              <path d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.46.89 11.43 0 9 0 5.48 0 2.43 2.02.95 4.95l3.01 2.33c.71-2.13 2.7-3.7 5.04-3.7Z" fill="#EA4335"/>
-            </svg>
             CONTINUE WITH GOOGLE
           </button>
-
-          <!-- Footer Switcher Link -->
           <div style="margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line); text-align: center; color: var(--muted); font-size: 15px;">
             <span id="footer-switch-text">Need an account?</span>
             <button type="button" id="footer-switch-btn" style="background: transparent; border: none; color: var(--cyan); font-weight: 700; cursor: pointer; font-family: Rajdhani; font-size: 15px; margin-left: 5px;">
@@ -1039,32 +1386,53 @@
     </div>
   </div>
 
-  <!-- DASHBOARD / STOREFRONT (Shown when authenticated) -->
+  <!-- DASHBOARD / STOREFRONT -->
   <div id="dashboard-screen" style="display: none;">
     <canvas id="ocean-canvas" aria-hidden="true"></canvas>
 
     <header class="topbar">
       <nav class="wrap nav">
-        <a class="brand" href="#home">SANDY <b>SHORES</b></a>
+        <a class="brand" href="#home" onclick="window.showStore(); return false;">SANDY <b>SHORES</b></a>
         <div class="navlinks">
-          <a href="#marketplace">Marketplace</a>
-          <a href="#how">How it works</a>
+          <a href="#marketplace" onclick="window.showStore()">Marketplace</a>
+          <button id="seller-orders-nav-btn" style="display: none; background: rgba(255, 186, 8, 0.15); border: 1px solid var(--amber); color: var(--amber); border-radius: 8px; padding: 5px 12px; font-family: Orbitron; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s;" onclick="window.showSellerOrders()">
+            📋 ALL ORDERS <span id="seller-orders-nav-badge" style="background: var(--amber); color: #00202a; border-radius: 99px; padding: 1px 6px; font-size: 10px; margin-left: 4px; font-weight: 900;">0</span>
+          </button>
+          <a href="#how" onclick="window.showStore()">How it works</a>
           <a id="discord-nav" target="_blank" rel="noopener noreferrer">Discord</a>
         </div>
-        <button class="orders" onclick="window.openOrders()">
-          My orders <span id="orders-count" class="badge">0</span>
-        </button>
-        <button id="logout-btn" class="logout-btn" title="Sign out of your account">
-          LOGOUT
-        </button>
+        <div style="display: flex; align-items: center; gap: 10px; margin-left: auto;">
+          <button id="role-toggle-btn" class="role-toggle" onclick="window.toggleRoleMode()" title="Toggle between Customer and Seller view to test 1-on-1 replies">
+            ● CUSTOMER
+          </button>
+          <button class="orders" onclick="window.openOrders()">
+            My orders <span id="orders-count" class="badge">0</span>
+          </button>
+          <button id="logout-btn" class="logout-btn" title="Sign out of your account">
+            LOGOUT
+          </button>
+        </div>
       </nav>
     </header>
+
+    <!-- Seller Mode Active Top Notification Banner -->
+    <div id="seller-top-notice" class="wrap" style="display: none; padding-top: 16px;">
+      <div style="background: rgba(255, 186, 8, 0.15); border: 1px solid rgba(255, 186, 8, 0.45); border-radius: 10px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; box-shadow: 0 0 20px rgba(255, 186, 8, 0.15);">
+        <div style="display: flex; align-items: center; gap: 8px; font-family: Orbitron; font-size: 12px; color: var(--amber); font-weight: 700;">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--amber);"></span>
+          SELLER DISPATCH ACTIVE: You have ongoing customer orders awaiting delivery &amp; verification.
+        </div>
+        <button onclick="window.showSellerOrders()" style="background: var(--amber); color: #00202a; border: none; border-radius: 6px; padding: 6px 14px; font-family: Orbitron; font-size: 11px; font-weight: 900; cursor: pointer;">
+          VIEW ALL ORDERS &amp; CHATS &rarr;
+        </button>
+      </div>
+    </div>
 
     <main id="storefront">
       <section id="home" class="hero wrap">
         <div class="eyebrow">BLOX FRUITS MARKETPLACE</div>
         <h1>POWER UP YOUR <span>JOURNEY</span></h1>
-        <p>Rare fruits, gamepasses and accounts — with a clear checkout and an order space for every purchase.</p>
+        <p>Rare fruits, gamepasses and accounts — with secure Firestore sync and Eldorado.gg-style real-time order chat.</p>
         <a class="cta" href="#marketplace">EXPLORE MARKETPLACE</a>
       </section>
 
@@ -1072,7 +1440,7 @@
 
       <section id="marketplace" class="wrap">
         <h2 class="section-title">FEATURED INVENTORY</h2>
-        <p class="section-note">Direct in-game gifting, account transfers and fruit trade deliveries handled safely.</p>
+        <p class="section-note">Direct in-game gifting, account transfers and fruit trade deliveries handled live in your order chat.</p>
         <div class="filters" id="filters"></div>
         <div class="products" id="products"></div>
       </section>
@@ -1080,7 +1448,7 @@
       <section id="how" class="how">
         <div class="wrap">
           <h2 class="section-title">HOW IT WORKS</h2>
-          <p class="section-note">Clear three-step delivery pipeline with real-time order tracking.</p>
+          <p class="section-note">Clear three-step delivery pipeline with real-time order tracking and private chat.</p>
           <div class="steps">
             <article class="step">
               <strong>1. CHOOSE &amp; ORDER</strong>
@@ -1091,8 +1459,8 @@
               <p>Pay via UPI / QR code, USDT crypto transfer or agreed manual methods, then enter your payment reference.</p>
             </article>
             <article class="step">
-              <strong>3. RECEIVE IN-GAME</strong>
-              <p>We verify payment, coordinate via Discord or the order chat, and deliver through private server trade or gift.</p>
+              <strong>3. LIVE ORDER CHAT</strong>
+              <p>Chat 1-on-1 with Sandy Shores in real-time Firestore chat to coordinate trade delivery in Roblox.</p>
             </article>
           </div>
         </div>
@@ -1108,10 +1476,14 @@
       </section>
     </main>
 
+    <!-- SELLER ALL ORDERS DISPATCH VIEW -->
+    <section id="seller-orders-view" class="wrap seller-orders-view"></section>
+
+    <!-- ACTIVE ORDER VIEW (ELDORADO.GG STYLE CHAT) -->
     <section id="order-view" class="wrap order-view"></section>
 
     <footer>
-      <span>&copy; <span id="year"></span> SANDY SHORES</span>
+      <span>&copy; <span id="year"></span> SANDY SHORES MARKETPLACE</span>
     </footer>
 
     <!-- Checkout Modal -->
@@ -1140,11 +1512,13 @@
     <div id="toast" class="toast"></div>
   </div>
 
-  <!-- FIREBASE MODULAR SDK -->
+  <!-- FIREBASE MODULAR SDK v11 -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
     import {
       getAuth,
+      setPersistence,
+      browserLocalPersistence,
       signInWithEmailAndPassword,
       createUserWithEmailAndPassword,
       sendEmailVerification,
@@ -1153,8 +1527,21 @@
       GoogleAuthProvider,
       signInWithPopup
     } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc,
+      collection,
+      query,
+      where,
+      orderBy,
+      onSnapshot,
+      serverTimestamp,
+      updateDoc
+    } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-    // Your web app's Firebase configuration
+    // Sandy Shores Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBrtf4fL_z5qOcOsV_stH1WHWRvYqyCcMU",
       authDomain: "sandyshoreschat.firebaseapp.com",
@@ -1164,26 +1551,28 @@
       appId: "1:228390066480:web:4280ef8fa45e3f0a8190f5"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Persistent Login: keep session across browser tabs & restarts
+    setPersistence(auth, browserLocalPersistence).catch(console.warn);
 
     /* --- DOM Elements --- */
     const sessionLoader = document.getElementById("session-loader");
     const authScreen = document.getElementById("auth-screen");
     const dashboardScreen = document.getElementById("dashboard-screen");
-
     const verificationView = document.getElementById("verification-view");
     const credentialsView = document.getElementById("credentials-view");
     const verificationEmailDisplay = document.getElementById("verification-email-display");
-    const resendStatusBox = document.getElementById("resend-status-box");
     const verificationLoginBtn = document.getElementById("verification-login-btn");
-    const resendBtn = document.getElementById("resend-btn");
 
     const authForm = document.getElementById("auth-form");
     const authEmail = document.getElementById("auth-email");
     const authPassword = document.getElementById("auth-password");
     const authConfirmPassword = document.getElementById("auth-confirm-password");
+    const authRoblox = document.getElementById("auth-roblox");
+    const robloxNameField = document.getElementById("roblox-name-field");
     const confirmPasswordField = document.getElementById("confirm-password-field");
     const authSubmitBtn = document.getElementById("auth-submit-btn");
     const tabSignIn = document.getElementById("tab-signin");
@@ -1196,10 +1585,24 @@
     const authErrorClose = document.getElementById("auth-error-close");
     const googleSigninBtn = document.getElementById("google-signin-btn");
     const logoutBtn = document.getElementById("logout-btn");
+    const roleToggleBtn = document.getElementById("role-toggle-btn");
 
+    let currentUser = null;
     let isSignUp = false;
-    let pendingVerificationEmail = null;
-    let lastEnteredPassword = "";
+    let isOwnerMode = false;
+    let currentOrders = [];
+    let currentActiveOrder = null;
+    let chatUnsubscribe = null;
+    let ordersUnsubscribe = null;
+
+    function toast(text) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = text;
+      t.classList.add('show');
+      setTimeout(() => t?.classList.remove('show'), 3200);
+    }
+    window.toast = toast;
 
     function showError(msg) {
       if (msg) {
@@ -1209,7 +1612,6 @@
         authErrorBanner.style.display = "none";
       }
     }
-
     authErrorClose.addEventListener("click", () => showError(null));
 
     function switchMode(signup) {
@@ -1219,18 +1621,20 @@
         tabSignUp.classList.add("active");
         tabSignIn.classList.remove("active");
         confirmPasswordField.style.display = "block";
+        robloxNameField.style.display = "block";
         authConfirmPassword.required = true;
         authSubmitBtn.textContent = "CREATE ACCOUNT";
-        authSubtitle.textContent = "Create an account to access the private marketplace";
+        authSubtitle.textContent = "Create an account to access the marketplace and order chat";
         footerSwitchText.textContent = "Already have an account?";
         footerSwitchBtn.textContent = "Sign In";
       } else {
         tabSignIn.classList.add("active");
         tabSignUp.classList.remove("active");
         confirmPasswordField.style.display = "none";
+        robloxNameField.style.display = "none";
         authConfirmPassword.required = false;
         authSubmitBtn.textContent = "SIGN IN TO DASHBOARD";
-        authSubtitle.textContent = "Sign in to access your dashboard and marketplace";
+        authSubtitle.textContent = "Sign in to access your orders and live chat with seller";
         footerSwitchText.textContent = "Need an account?";
         footerSwitchBtn.textContent = "Create Account";
       }
@@ -1241,86 +1645,69 @@
     footerSwitchBtn.addEventListener("click", () => switchMode(!isSignUp));
 
     function showVerificationScreen(email) {
-      pendingVerificationEmail = email;
       verificationEmailDisplay.textContent = email;
       credentialsView.style.display = "none";
       verificationView.style.display = "block";
-      resendStatusBox.style.display = "none";
     }
 
-    function showCredentialsScreen() {
+    verificationLoginBtn.addEventListener("click", () => {
       credentialsView.style.display = "block";
       verificationView.style.display = "none";
-      showError(null);
       switchMode(false);
-    }
-
-    verificationLoginBtn.addEventListener("click", showCredentialsScreen);
-
-    resendBtn.addEventListener("click", async () => {
-      if (!pendingVerificationEmail || !lastEnteredPassword) {
-        resendStatusBox.style.display = "block";
-        resendStatusBox.style.color = "var(--danger)";
-        resendStatusBox.textContent = "Please return to the login form and enter your credentials to resend.";
-        return;
-      }
-      try {
-        resendBtn.textContent = "Sending...";
-        resendBtn.disabled = true;
-        const cred = await signInWithEmailAndPassword(auth, pendingVerificationEmail, lastEnteredPassword);
-        await sendEmailVerification(cred.user);
-        await signOut(auth);
-        resendStatusBox.style.display = "block";
-        resendStatusBox.style.color = "var(--green)";
-        resendStatusBox.textContent = "Verification email resent successfully!";
-      } catch (err) {
-        resendStatusBox.style.display = "block";
-        resendStatusBox.style.color = "var(--danger)";
-        resendStatusBox.textContent = "Could not resend email. Please try logging in again.";
-      } finally {
-        resendBtn.textContent = "Didn't receive the email? Resend verification";
-        resendBtn.disabled = false;
-      }
     });
 
-    // Handle credentials submit
+    // Firestore User Profile Sync
+    async function syncUserProfile(user, robloxName) {
+      try {
+        const uRef = doc(db, "users", user.uid);
+        const snap = await getDoc(uRef);
+        const now = new Date().toISOString();
+        if (snap.exists()) {
+          await updateDoc(uRef, { lastLoginAt: now });
+        } else {
+          await setDoc(uRef, {
+            uid: user.uid,
+            email: user.email || '',
+            displayName: robloxName || user.displayName || user.email?.split('@')[0] || 'User',
+            createdAt: now,
+            lastLoginAt: now,
+            role: 'customer'
+          });
+        }
+      } catch (err) {
+        console.warn("User profile sync note:", err);
+      }
+    }
+
     authForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       showError(null);
       const email = authEmail.value.trim();
       const password = authPassword.value;
-      lastEnteredPassword = password;
+      const roblox = authRoblox.value.trim();
 
       if (isSignUp) {
-        const confirm = authConfirmPassword.value;
         if (password.length < 6) {
-          showError("Password must be at least 6 characters long.");
+          showError("Password must be at least 6 characters.");
           return;
         }
-        if (password !== confirm) {
+        if (password !== authConfirmPassword.value) {
           showError("Passwords do not match.");
           return;
         }
-
         authSubmitBtn.disabled = true;
         authSubmitBtn.textContent = "CREATING ACCOUNT...";
-
         try {
-          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-          await sendEmailVerification(userCredential.user);
+          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          await syncUserProfile(cred.user, roblox);
+          await sendEmailVerification(cred.user);
           await signOut(auth);
-          authPassword.value = "";
-          authConfirmPassword.value = "";
           showVerificationScreen(email);
         } catch (err) {
           if (err.code === "auth/email-already-in-use") {
             showError("This email is already registered. Please sign in.");
-          } else if (err.code === "auth/invalid-email") {
-            showError("Please enter a valid email address.");
-          } else if (err.code === "auth/weak-password") {
-            showError("Password should be at least 6 characters.");
           } else {
-            showError("Email or password incorrect.");
+            showError(err.message || "Failed to create account.");
           }
         } finally {
           authSubmitBtn.disabled = false;
@@ -1329,12 +1716,13 @@
       } else {
         authSubmitBtn.disabled = true;
         authSubmitBtn.textContent = "SIGNING IN...";
-
         try {
-          const userCredential = await signInWithEmailAndPassword(auth, email, password);
-          if (!userCredential.user.emailVerified) {
+          const cred = await signInWithEmailAndPassword(auth, email, password);
+          if (!cred.user.emailVerified) {
             await signOut(auth);
             showVerificationScreen(email);
+          } else {
+            await syncUserProfile(cred.user);
           }
         } catch (err) {
           showError("Email or password incorrect.");
@@ -1345,132 +1733,116 @@
       }
     });
 
-    // Handle Google Sign-In
     googleSigninBtn.addEventListener("click", async () => {
-      showError(null);
-      googleSigninBtn.disabled = true;
-      googleSigninBtn.style.opacity = "0.7";
       try {
         const provider = new GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: "select_account" });
-        await signInWithPopup(auth, provider);
+        const cred = await signInWithPopup(auth, provider);
+        if (cred.user) await syncUserProfile(cred.user);
       } catch (err) {
-        if (err.code === "auth/popup-closed-by-user" || err.code === "auth/cancelled-popup-request") {
-          // User closed popup
-        } else if (err.code === "auth/popup-blocked") {
-          showError("Google popup was blocked by browser. Please allow popups.");
-        } else if (err.code === "auth/operation-not-allowed") {
-          showError("Google Sign-In is not enabled in Firebase Console. Please enable Google under Authentication > Sign-in method.");
-        } else {
-          showError(err.message || "Failed to continue with Google.");
+        if (err.code !== "auth/popup-closed-by-user") {
+          showError(err.message || "Google sign-in failed.");
         }
-      } finally {
-        googleSigninBtn.disabled = false;
-        googleSigninBtn.style.opacity = "1";
       }
     });
 
-    // Handle Logout
-    logoutBtn.addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-      } catch (err) {
-        console.error(err);
-      }
-    });
+    logoutBtn.addEventListener("click", () => signOut(auth));
 
-    // Listen to Firebase Auth state
-    onAuthStateChanged(auth, async (user) => {
-      sessionLoader.style.display = "none";
-      if (user) {
-        const isGoogle = user.providerData.some(p => p.providerId === "google.com");
-        if (user.emailVerified || isGoogle) {
-          authScreen.style.display = "none";
-          dashboardScreen.style.display = "block";
-          initStorefront();
-        } else {
-          const email = user.email;
-          try { await signOut(auth); } catch {}
-          authScreen.style.display = "block";
-          dashboardScreen.style.display = "none";
-          if (email) showVerificationScreen(email);
-        }
+    window.toggleRoleMode = function() {
+      isOwnerMode = !isOwnerMode;
+      roleToggleBtn.textContent = isOwnerMode ? "★ SELLER MODE" : "● CUSTOMER";
+      roleToggleBtn.classList.toggle("active", isOwnerMode);
+      
+      const sellerNavBtn = document.getElementById("seller-orders-nav-btn");
+      const sellerTopNotice = document.getElementById("seller-top-notice");
+      if (sellerNavBtn) sellerNavBtn.style.display = isOwnerMode ? "inline-flex" : "none";
+      if (sellerTopNotice) sellerTopNotice.style.display = isOwnerMode ? "block" : "none";
+
+      toast(isOwnerMode ? "Switched to SELLER VIEW: All ongoing orders loaded" : "Switched to CUSTOMER VIEW");
+      listenOrders();
+
+      if (currentActiveOrder) {
+        window.openOrder(currentActiveOrder.id);
+      } else if (isOwnerMode) {
+        window.showSellerOrders();
       } else {
+        window.showStore();
+      }
+    };
+
+    // Auth State Observer
+    onAuthStateChanged(auth, (user) => {
+      sessionLoader.style.display = "none";
+      if (user && user.emailVerified) {
+        currentUser = user;
+        authScreen.style.display = "none";
+        dashboardScreen.style.display = "block";
+        initStorefront();
+        listenOrders();
+      } else {
+        currentUser = null;
         authScreen.style.display = "block";
         dashboardScreen.style.display = "none";
+        if (ordersUnsubscribe) ordersUnsubscribe();
       }
     });
 
-    /* --- Canvas Animation --- */
-    function initCanvas(id) {
-      const c = document.getElementById(id);
-      if (!c) return;
-      const x = c.getContext("2d");
-      if (!x) return;
-      let w, h, t = 0;
-      let stars = [];
-      function size() {
-        w = c.width = window.innerWidth;
-        h = c.height = window.innerHeight;
-        stars = Array.from({ length: 45 }, () => ({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          r: Math.random() * 1.6 + 0.3,
-          s: Math.random() * 0.35 + 0.15
-        }));
-      }
-      function draw() {
-        x.clearRect(0, 0, w, h);
-        const g = x.createLinearGradient(0, 0, 0, h);
-        g.addColorStop(0, "#061529");
-        g.addColorStop(0.55, "#071d38");
-        g.addColorStop(1, "#020710");
-        x.fillStyle = g;
-        x.fillRect(0, 0, w, h);
-
-        stars.forEach(p => {
-          p.y -= p.s;
-          if (p.y < 0) { p.y = h; p.x = Math.random() * w; }
-          x.fillStyle = "rgba(0,217,255,.5)";
-          x.beginPath();
-          x.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          x.fill();
-        });
-
-        for (let n = 0; n < 3; n++) {
-          x.beginPath();
-          for (let px = 0; px <= w; px += 12) {
-            const py = h * (0.7 + n * 0.08) + Math.sin(px * 0.008 + t * (0.7 + n * 0.15) + n) * (18 + n * 7);
-            if (px) x.lineTo(px, py);
-            else x.moveTo(px, py);
-          }
-          x.strokeStyle = `rgba(0,217,255,${0.17 - n * 0.035})`;
-          x.lineWidth = 1.2;
-          x.stroke();
+    // Safety fallback: dismiss loader if Firebase connection is delayed
+    setTimeout(() => {
+      if (sessionLoader && sessionLoader.style.display !== "none") {
+        sessionLoader.style.display = "none";
+        if (!currentUser) {
+          authScreen.style.display = "block";
+          dashboardScreen.style.display = "none";
         }
-        t += 0.017;
-        requestAnimationFrame(draw);
       }
-      window.addEventListener("resize", size);
-      size();
-      draw();
-    }
-    initCanvas("auth-ocean-canvas");
+    }, 2500);
 
-    /* --- STOREFRONT LOGIC --- */
+    // Real-Time Firestore Orders Listener
+    function listenOrders() {
+      if (!currentUser) return;
+      if (ordersUnsubscribe) ordersUnsubscribe();
+
+      const ordersCol = collection(db, "orders");
+      const q = isOwnerMode
+        ? query(ordersCol)
+        : query(ordersCol, where("customerUid", "==", currentUser.uid));
+
+      ordersUnsubscribe = onSnapshot(q, (snapshot) => {
+        currentOrders = [];
+        snapshot.forEach((d) => {
+          currentOrders.push({ id: d.id, ...d.data() });
+        });
+        currentOrders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+        
+        const countEl = document.getElementById("orders-count");
+        if (countEl) countEl.textContent = String(currentOrders.length);
+
+        const sellerNavBadge = document.getElementById("seller-orders-nav-badge");
+        if (sellerNavBadge) sellerNavBadge.textContent = String(currentOrders.length);
+
+        // If the seller orders section is currently open, refresh its contents live
+        const sellerView = document.getElementById("seller-orders-view");
+        if (sellerView && sellerView.classList.contains("active")) {
+          if (typeof window.renderSellerOrders === "function") {
+            window.renderSellerOrders();
+          }
+        }
+      }, (err) => console.warn("Orders sync error:", err));
+    }
+
+    /* --- STOREFRONT & CHAT LOGIC --- */
     let storeInitialized = false;
     function initStorefront() {
       if (storeInitialized) return;
       storeInitialized = true;
-      initCanvas("ocean-canvas");
 
       const STORE_CONFIG = {
         discordInvite: 'https://discord.gg/FtCe5nPMN2',
         merchantName: 'SANDY SHORES',
         paymentMethods: [
           { id: 'upi', icon: '◈', name: 'UPI / QR payment', description: 'Pay the exact order total with any UPI app.', upiId: 'sandy6996@ybl' },
-          { id: 'crypto', icon: '₿', name: 'Crypto transfer', description: 'Send USDT to the wallet below.', details: 'Replace this with your USDT wallet address' },
-          { id: 'manual', icon: '◎', name: 'Manual payment', description: 'Use your agreed payment option and submit the reference.', details: 'Contact SANDY SHORES on Discord for instructions.' }
+          { id: 'crypto', icon: '₿', name: 'Crypto transfer (USDT)', description: 'Send USDT to the wallet below.', details: '0x71C...392A (Contact on Discord to confirm network address)' },
+          { id: 'manual', icon: '◎', name: 'Manual payment', description: 'Use your agreed payment option and submit reference.', details: 'Contact SANDY SHORES on Discord for instructions.' }
         ]
       };
 
@@ -1482,17 +1854,13 @@
       ];
 
       const PRODUCTS_DATA = [
-        { id: 1, name: 'Dragon Fruit', category: 'Fruits', price: 900, description: 'Mythical Physical Dragon Fruit (WEST / EAST variant options).', image: 'https://via.placeholder.com/600x360/081529/00D9FF?text=Dragon+Fruit' },
-        { id: 2, name: 'Kitsune Fruit', category: 'Fruits', price: 350, description: 'Extremely rare Physical Kitsune Fruit with spirit fire.', image: 'https://via.placeholder.com/600x360/081529/00D9FF?text=Kitsune+Fruit' },
-        { id: 4, name: '2x Money Gamepass', category: 'Gamepasses', price: 350, description: 'Permanent 2x Beli multiplier via the in-game gift method.', image: 'https://via.placeholder.com/600x360/081529/00D9FF?text=2x+Money' },
-        { id: 5, name: '2x Mastery Gamepass', category: 'Gamepasses', price: 350, description: 'Double leveling speed for fruits and weapons.', image: 'https://via.placeholder.com/600x360/081529/00D9FF?text=2x+Mastery' },
-        { id: 6, name: 'Fast Boats Gamepass', category: 'Gamepasses', price: 299, description: 'High-speed sea vessels sent through the gift method.', image: 'https://via.placeholder.com/600x360/081529/00D9FF?text=Fast+Boats' },
-        { id: 10, name: 'Max Level Blox Account', category: 'Accounts', price: 1200, description: 'Fully leveled account with Godhuman, Soul Guitar and rare inventory.', image: 'https://via.placeholder.com/600x360/081529/00D9FF?text=Max+Account' }
+        { id: 1, name: 'Dragon Fruit', category: 'Fruits', price: 900, description: 'Mythical Physical Dragon Fruit (WEST / EAST variant options).', image: 'https://images.unsplash.com/photo-1527137342181-19aab11a8ee8?auto=format&fit=crop&w=600&q=80' },
+        { id: 2, name: 'Kitsune Fruit', category: 'Fruits', price: 350, description: 'Extremely rare Physical Kitsune Fruit with spirit fire.', image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&w=600&q=80' },
+        { id: 4, name: '2x Money Gamepass', category: 'Gamepasses', price: 350, description: 'Permanent 2x Beli multiplier via the in-game gift method.', image: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80' },
+        { id: 5, name: '2x Mastery Gamepass', category: 'Gamepasses', price: 350, description: 'Double leveling speed for fruits and weapons.', image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=600&q=80' },
+        { id: 6, name: 'Fast Boats Gamepass', category: 'Gamepasses', price: 299, description: 'High-speed sea vessels sent through the gift method.', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80' },
+        { id: 10, name: 'Max Level Blox Account', category: 'Accounts', price: 1200, description: 'Fully leveled account with Godhuman, Soul Guitar and rare inventory.', image: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80' }
       ];
-
-      const KEY = 'sandy_shores_customer_orders_v2';
-      let orders = [];
-      try { orders = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { orders = []; }
 
       let filter = 'All';
       let checkout = null;
@@ -1502,28 +1870,16 @@
       const money = (n) => '₹' + Number(n).toLocaleString('en-IN');
       const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
 
-      function save() {
-        try { localStorage.setItem(KEY, JSON.stringify(orders)); } catch (e) { console.error(e); }
-        renderOrderCount();
-      }
-
-      function renderOrderCount() {
-        const el = document.getElementById('orders-count');
-        if (el) el.textContent = String(orders.length);
-      }
-
       function renderStore() {
         const statsEl = document.getElementById('stats');
         if (statsEl) {
           statsEl.innerHTML = STATS_DATA.map(x => `<div class="stat"><strong>${x[0]}</strong><small>${x[1]}</small></div>`).join('');
         }
-
         const cats = ['All', ...new Set(PRODUCTS_DATA.map(p => p.category))];
         const filtersEl = document.getElementById('filters');
         if (filtersEl) {
           filtersEl.innerHTML = cats.map(c => `<button class="filter ${c === filter ? 'active' : ''}" onclick="window.setFilter('${c}')">${c}</button>`).join('');
         }
-
         const list = filter === 'All' ? PRODUCTS_DATA : PRODUCTS_DATA.filter(p => p.category === filter);
         const productsEl = document.getElementById('products');
         if (productsEl) {
@@ -1546,17 +1902,13 @@
         }
       }
 
-      window.setFilter = function(c) {
-        filter = c;
-        renderStore();
-      };
-
-      window.changeQty = function(id, by) {
+      window.setFilter = (c) => { filter = c; renderStore(); };
+      window.changeQty = (id, by) => {
         const el = document.getElementById('qty-' + id);
         if (el) el.value = String(Math.max(1, Math.min(99, (+el.value || 1) + by)));
       };
 
-      window.startCheckout = function(id) {
+      window.startCheckout = (id) => {
         const p = PRODUCTS_DATA.find(x => x.id === id);
         if (!p) return;
         const qty = +(document.getElementById('qty-' + id)?.value || 1);
@@ -1567,17 +1919,13 @@
         renderCheckout();
       };
 
-      window.closeCheckout = function() {
+      window.closeCheckout = () => {
         document.getElementById('checkout-modal')?.classList.remove('active');
         checkout = null;
       };
 
-      function progress() {
-        document.querySelectorAll('#progress i').forEach((x, i) => x.classList.toggle('active', i < checkoutStep));
-      }
-
       function renderCheckout() {
-        progress();
+        document.querySelectorAll('#progress i').forEach((x, i) => x.classList.toggle('active', i < checkoutStep));
         const c = document.getElementById('checkout-content');
         if (!c || !checkout) return;
 
@@ -1590,11 +1938,11 @@
           c.innerHTML = `<h2>CHECKOUT DETAILS</h2>${summary}
           <div class="field">
             <label>Roblox username / delivery details</label>
-            <input id="customer-name" value="${esc(checkout.customer.name || '')}" placeholder="Your username">
+            <input id="customer-name" value="${esc(checkout.customer.name || '')}" placeholder="Your exact Roblox username">
           </div>
           <div class="field">
             <label>Order note (optional)</label>
-            <textarea id="customer-note" placeholder="Variant, delivery preference, or helpful note">${esc(checkout.customer.note || '')}</textarea>
+            <textarea id="customer-note" placeholder="Variant, delivery preference, or schedule note">${esc(checkout.customer.note || '')}</textarea>
           </div>
           <button class="next" onclick="window.toMethods()">CONTINUE TO PAYMENT</button>`;
         } else if (checkoutStep === 2) {
@@ -1605,7 +1953,6 @@
               <span><b>${m.name}</b><span>${m.description}</span></span>
             </button>`).join('')}
           </div>
-          <p class="notice">Choose one of the available payment methods below.</p>
           <button class="back" onclick="window.checkoutStepPrev()">BACK</button>
           <button class="next" onclick="window.toPayment()">CONTINUE</button>`;
         } else {
@@ -1614,19 +1961,17 @@
           if (m && m.id === 'upi') {
             const upi = m.upiId || '';
             const link = `upi://pay?pa=${encodeURIComponent(upi)}&pn=${encodeURIComponent(STORE_CONFIG.merchantName)}&am=${checkout.total.toFixed(2)}&cu=INR&tn=${encodeURIComponent(checkout.product.name + ' x' + checkout.qty)}`;
-            instructions = `<b>Pay ${money(checkout.total)} to:</b>
+            instructions = `<b>Pay ${money(checkout.total)} via UPI:</b>
               <div class="pay-details">${esc(upi)}</div>
               <a class="copy" href="${link}">OPEN UPI APP</a>
               <div id="qr"></div>`;
             setTimeout(() => {
               const qrEl = document.getElementById('qr');
-              if (qrEl) {
+              if (qrEl && window.QRCode) {
                 qrEl.innerHTML = '';
-                if (window.QRCode) {
-                  new window.QRCode(qrEl, { text: link, width: 150, height: 150, colorDark: '#00d9ff', colorLight: '#061426' });
-                }
+                new window.QRCode(qrEl, { text: link, width: 150, height: 150, colorDark: '#00d9ff', colorLight: '#061426' });
               }
-            }, 0);
+            }, 50);
           } else if (m) {
             instructions = `<b>${esc(m.name)}</b><div class="pay-details">${esc(m.details || '')}</div>`;
           }
@@ -1634,169 +1979,537 @@
           c.innerHTML = `<h2>COMPLETE PAYMENT</h2>${summary}
           <div class="payment-box">${instructions}</div>
           <div class="field">
-            <label>Payment reference / transaction ID</label>
-            <input id="payment-reference" placeholder="Enter your payment reference">
+            <label>Payment reference / transaction ID (UTR)</label>
+            <input id="payment-reference" placeholder="Enter transaction reference">
           </div>
-          <p class="notice">Submitting creates your private order space and marks payment as submitted for review. Do not enter card numbers or passwords here.</p>
+          <p class="notice">Submitting creates your order in Firestore and opens your private 1-on-1 Eldorado-style chat with the seller.</p>
           <button class="back" onclick="window.checkoutStepMethodBack()">BACK</button>
-          <button class="next" onclick="window.submitOrder()">SUBMIT PAYMENT & OPEN ORDER</button>`;
+          <button class="next" onclick="window.submitOrder()">SUBMIT PAYMENT &amp; OPEN CHAT</button>`;
         }
       }
 
-      window.toMethods = function() {
-        const name = document.getElementById('customer-name')?.value.trim() || '';
-        const note = document.getElementById('customer-note')?.value.trim() || '';
-        if (!name) { toast('Please add your Roblox username or delivery details.'); return; }
-        checkout.customer = { name, note };
+      window.toMethods = () => {
+        const name = document.getElementById('customer-name')?.value.trim();
+        if (!name) { toast('Please add your Roblox username.'); return; }
+        checkout.customer = { name, note: document.getElementById('customer-note')?.value.trim() };
         checkoutStep = 2;
         renderCheckout();
       };
 
-      window.pickMethod = function(id) {
-        selectedMethod = id;
-        renderCheckout();
-      };
+      window.pickMethod = (id) => { selectedMethod = id; renderCheckout(); };
+      window.toPayment = () => { if (!selectedMethod) { toast('Pick a payment method.'); return; } checkoutStep = 3; renderCheckout(); };
+      window.checkoutStepPrev = () => { checkoutStep = 1; renderCheckout(); };
+      window.checkoutStepMethodBack = () => { checkoutStep = 2; renderCheckout(); };
 
-      window.toPayment = function() {
-        if (!selectedMethod) { toast('Choose a payment method to continue.'); return; }
-        checkoutStep = 3;
-        renderCheckout();
-      };
-
-      window.checkoutStepPrev = function() { checkoutStep = 1; renderCheckout(); };
-      window.checkoutStepMethodBack = function() { checkoutStep = 2; renderCheckout(); };
-
-      window.submitOrder = function() {
-        const ref = document.getElementById('payment-reference')?.value.trim() || '';
-        if (!ref) { toast('Enter a payment reference before submitting.'); return; }
+      // Submit Order into Firestore
+      window.submitOrder = async () => {
+        const ref = document.getElementById('payment-reference')?.value.trim();
+        if (!ref) { toast('Please enter payment reference.'); return; }
         const method = STORE_CONFIG.paymentMethods.find(x => x.id === selectedMethod);
-        const id = 'ORD-' + Date.now().toString().slice(-8);
-        const o = {
-          id,
-          createdAt: new Date().toISOString(),
-          product: checkout.product.name,
-          quantity: checkout.qty,
-          total: checkout.total,
-          customer: checkout.customer,
-          paymentMethod: method ? method.name : 'Unknown',
-          paymentReference: ref,
-          status: 'Payment submitted',
-          messages: [{ type: 'system', text: 'Your order has been created. Payment has been submitted for review. Use this order space to keep your delivery details together.', at: new Date().toISOString() }]
-        };
-        orders.unshift(o);
-        save();
-        window.closeCheckout();
-        window.openOrder(id);
-        toast('Order created — payment submitted.');
+        const orderId = 'ORD-' + Math.floor(10000000 + Math.random() * 90000000);
+
+        try {
+          const orderData = {
+            id: orderId,
+            customerUid: currentUser.uid,
+            customerEmail: currentUser.email,
+            customerName: checkout.customer.name,
+            customerNote: checkout.customer.note || '',
+            product: checkout.product.name,
+            productId: checkout.product.id,
+            quantity: checkout.qty,
+            total: checkout.total,
+            paymentMethod: method ? method.name : 'UPI',
+            paymentReference: ref,
+            status: 'Payment submitted',
+            createdAt: new Date().toISOString()
+          };
+
+          await setDoc(doc(db, "orders", orderId), orderData);
+
+          // Initial system message in messages subcollection
+          const msgRef = doc(collection(db, "orders", orderId, "messages"));
+          await setDoc(msgRef, {
+            id: msgRef.id,
+            orderId,
+            senderId: 'system',
+            senderName: 'SANDY SHORES SYSTEM',
+            senderRole: 'system',
+            text: `Order #${orderId} for "${checkout.product.name}" created. Payment reference "${ref}" submitted. The seller will reply here to coordinate delivery in Roblox.`,
+            createdAt: new Date().toISOString()
+          });
+
+          window.closeCheckout();
+          window.openOrder(orderId);
+          toast('Order created in Firestore — Live chat opened!');
+        } catch (err) {
+          console.error(err);
+          toast('Failed to create order in Firestore.');
+        }
       };
 
-      window.openOrders = function() {
-        renderOrders();
+      window.openOrders = () => {
+        renderOrdersList();
         document.getElementById('orders-panel')?.classList.add('active');
       };
 
-      window.closeOrders = function(e) {
+      window.closeOrders = (e) => {
         const panel = document.getElementById('orders-panel');
         if (!e || e.target === panel) panel?.classList.remove('active');
       };
 
-      function renderOrders() {
+      function renderOrdersList() {
         const box = document.getElementById('orders-list');
         if (!box) return;
-        box.innerHTML = orders.length ? orders.map(o => `<article class="order-row">
-          <strong>${esc(o.id)} · ${esc(o.product)}</strong>
-          <p>${money(o.total)} · ${esc(o.status)}</p>
-          <button class="open-order" onclick="document.getElementById('orders-panel').classList.remove('active');window.openOrder('${o.id}')">OPEN ORDER SPACE</button>
-        </article>`).join('') : '<div class="empty">No customer orders yet.<br>Visit the marketplace to place one.</div>';
+
+        const sellerBtnHtml = isOwnerMode ? `
+          <button onclick="document.getElementById('orders-panel').classList.remove('active'); window.showSellerOrders();" style="width: 100%; margin-bottom: 15px; padding: 10px; background: rgba(255, 186, 8, 0.15); border: 1px solid var(--amber); color: var(--amber); border-radius: 8px; font-family: Orbitron; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>📋 OPEN ALL ORDERS DASHBOARD</span>
+          </button>
+        ` : '';
+
+        box.innerHTML = sellerBtnHtml + (currentOrders.length ? currentOrders.map(o => `<article class="order-row">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <strong style="font-family: Orbitron; font-size: 13px;">${esc(o.id)}</strong>
+            <span class="status" style="font-size: 11px;">${esc(o.status)}</span>
+          </div>
+          <p style="color: white; font-weight: 700; margin: 6px 0;">${esc(o.product)} ${o.quantity > 1 ? `(×${o.quantity})` : ''}</p>
+          <p>${money(o.total)} · Ref: ${esc(o.paymentReference)}</p>
+          <button class="open-order" onclick="document.getElementById('orders-panel').classList.remove('active');window.openOrder('${o.id}')">OPEN LIVE ORDER CHAT</button>
+        </article>`).join('') : '<div style="text-align: center; padding: 40px 10px; color: var(--muted);">No customer orders yet.</div>');
       }
 
-      window.openOrder = function(id) {
-        const o = orders.find(x => x.id === id);
+      // Open Live Eldorado-Style 1-on-1 Order Chat
+      window.openOrder = (id) => {
+        const o = currentOrders.find(x => x.id === id);
         if (!o) return;
+        currentActiveOrder = o;
+
         const storefront = document.getElementById('storefront');
         const orderView = document.getElementById('order-view');
+        const sellerView = document.getElementById('seller-orders-view');
         if (storefront) storefront.style.display = 'none';
+        if (sellerView) sellerView.classList.remove('active');
         if (!orderView) return;
 
         orderView.classList.add('active');
-        orderView.innerHTML = `<div class="order-head">
-          <div>
-            <a class="orders" href="#" onclick="window.showStore();return false">← Marketplace</a>
-            <h1>ORDER ${esc(o.id)}</h1>
-            <span class="status">${esc(o.status)}</span>
+        orderView.innerHTML = `
+          <div class="order-head">
+            <div>
+              <a class="orders" href="#" onclick="${isOwnerMode ? 'window.showSellerOrders()' : 'window.showStore()'};return false;" style="display: inline-block; margin-bottom: 8px;">
+                ← ${isOwnerMode ? 'BACK TO ALL ORDERS (SELLER DISPATCH)' : 'BACK TO MARKETPLACE'}
+              </a>
+              <h1>ORDER <span>${esc(o.id)}</span></h1>
+              <span class="status">${esc(o.status)}</span>
+            </div>
+            <div style="color: var(--muted); font-size: 14px;">
+              Created: ${new Date(o.createdAt).toLocaleString()}
+            </div>
           </div>
-          <div class="help">Created ${new Date(o.createdAt).toLocaleString()}</div>
-        </div>
-        <div class="order-layout">
-          <aside class="order-info">
-            <h3>ORDER SUMMARY</h3>
-            <div class="detail"><span>Item</span>${esc(o.product)} × ${o.quantity}</div>
-            <div class="detail"><span>Total</span>${money(o.total)}</div>
-            <div class="detail"><span>Payment method</span>${esc(o.paymentMethod)}</div>
-            <div class="detail"><span>Payment reference</span>${esc(o.paymentReference)}</div>
-            <div class="detail"><span>Delivery details</span>${esc(o.customer?.name || '')}${o.customer?.note ? '<br>' + esc(o.customer.note) : ''}</div>
-            <a class="discord-action" href="${STORE_CONFIG.discordInvite}" target="_blank" rel="noopener">OPEN DISCORD SUPPORT</a>
-          </aside>
-          <section class="chat">
-            <h3>ORDER CHAT</h3>
-            <p class="chat-note">Messages are saved locally in this browser. For seller support and payment confirmation, use the Sandy Shores Discord server.</p>
-            <div class="messages" id="messages"></div>
-            <form class="send" onsubmit="window.sendMessage(event,'${o.id}')">
-              <input id="message-input" placeholder="Message about this order" maxlength="500">
-              <button>SEND</button>
-            </form>
-          </section>
-        </div>`;
 
-        renderMessages(o);
+          <div class="order-layout">
+            <aside class="order-info">
+              <h3>ORDER SUMMARY</h3>
+              <div class="detail"><span>Item</span><b>${esc(o.product)} × ${o.quantity}</b></div>
+              <div class="detail"><span>Total</span><b style="color: var(--cyan); font-family: Orbitron;">${money(o.total)}</b></div>
+              <div class="detail"><span>Method</span>${esc(o.paymentMethod)}</div>
+              <div class="detail"><span>Payment Ref</span><code style="color: var(--cyan);">${esc(o.paymentReference)}</code></div>
+              <div class="detail"><span>Roblox Username</span><b style="color: var(--green);">${esc(o.customerName)}</b></div>
+              ${o.customerNote ? `<div class="detail"><span>Note</span>${esc(o.customerNote)}</div>` : ''}
+
+              ${isOwnerMode ? `
+                <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line);">
+                  <strong style="color: var(--amber); font-family: Orbitron; font-size: 12px; display: block; margin-bottom: 8px;">SELLER: UPDATE STATUS</strong>
+                  <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                    <button class="preset-btn" onclick="window.setOrderStatus('${o.id}', 'Payment verified')">Verify Payment</button>
+                    <button class="preset-btn" onclick="window.setOrderStatus('${o.id}', 'In delivery')">In Delivery</button>
+                    <button class="preset-btn" onclick="window.setOrderStatus('${o.id}', 'Completed')">Completed</button>
+                    <button class="preset-btn" style="color: var(--pink);" onclick="window.setOrderStatus('${o.id}', 'Cancelled')">Cancel</button>
+                  </div>
+                </div>
+              ` : ''}
+
+              <a class="discord-action" href="${STORE_CONFIG.discordInvite}" target="_blank" rel="noopener">DISCORD STAFF SUPPORT</a>
+            </aside>
+
+            <!-- 1-on-1 LIVE CHAT SECTION -->
+            <section class="chat">
+              <div class="chat-header">
+                <div>
+                  <h3 style="font-family: Orbitron; color: white;">1-ON-1 ORDER CHAT</h3>
+                  <span style="font-size: 12px; color: var(--muted);">Direct real-time communication between Customer &amp; Seller</span>
+                </div>
+                <div class="live-dot">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--green);"></span>
+                  LIVE CONNECTED
+                </div>
+              </div>
+
+              <div class="messages" id="messages-container"></div>
+
+              <div class="chat-presets">
+                <span style="font-family: Orbitron; font-size: 10px; color: var(--muted); align-self: center;">PRESETS:</span>
+                ${(isOwnerMode ? [
+                  'Payment received! Adding you on Roblox now.',
+                  'Please join my private server for delivery.',
+                  'Delivery complete! Enjoy your Blox Fruits order.',
+                  'What sea are you currently in?'
+                ] : [
+                  'Payment reference has been submitted.',
+                  'I am waiting in the Roblox trade hub.',
+                  'My Roblox username is confirmed.',
+                  'Trade complete! Thank you.'
+                ]).map(p => `<button class="preset-btn" onclick="window.sendChatPreset('${esc(p)}')">${esc(p)}</button>`).join('')}
+              </div>
+
+              <form class="send-box" onsubmit="window.sendOrderChat(event, '${o.id}')">
+                <input id="chat-input" placeholder="${isOwnerMode ? 'Reply as Seller (Verified Owner)...' : 'Message seller about Roblox delivery...'}" maxlength="1000" autocomplete="off">
+                <button type="submit">SEND</button>
+              </form>
+            </section>
+          </div>
+        `;
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        listenOrderChat(o.id);
+      };
+
+      // Real-time listener for order chat messages subcollection
+      function listenOrderChat(orderId) {
+        if (chatUnsubscribe) chatUnsubscribe();
+        const msgContainer = document.getElementById("messages-container");
+        if (!msgContainer) return;
+
+        const msgsCol = collection(db, "orders", orderId, "messages");
+        const q = query(msgsCol, orderBy("createdAt", "asc"));
+
+        chatUnsubscribe = onSnapshot(q, (snapshot) => {
+          const msgs = [];
+          snapshot.forEach(d => msgs.push({ id: d.id, ...d.data() }));
+
+          msgContainer.innerHTML = msgs.map(m => {
+            const role = m.senderRole || 'customer';
+            const isOwner = role === 'owner';
+            const isSys = role === 'system';
+
+            if (isSys) {
+              return `<div class="msg-wrap system">
+                <div class="message-bubble">
+                  <div style="color: var(--cyan); font-family: Orbitron; font-size: 10px; margin-bottom: 2px;">SYSTEM NOTICE</div>
+                  ${esc(m.text)}
+                </div>
+              </div>`;
+            }
+
+            return `<div class="msg-wrap ${isOwner ? 'owner' : 'customer'}">
+              <div class="msg-meta">
+                <span class="role-badge ${isOwner ? 'owner' : 'customer'}">${isOwner ? 'SELLER &bull; OWNER' : 'CUSTOMER'}</span>
+                <span>${esc(m.senderName || (isOwner ? 'Sandy Shores' : 'Customer'))}</span>
+                <span>${m.createdAt ? new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}</span>
+              </div>
+              <div class="message-bubble">${esc(m.text)}</div>
+            </div>`;
+          }).join('');
+
+          msgContainer.scrollTop = msgContainer.scrollHeight;
+        });
+      }
+
+      window.sendChatPreset = (text) => {
+        const inp = document.getElementById('chat-input');
+        if (inp) { inp.value = text; inp.focus(); }
+      };
+
+      window.sendOrderChat = async (e, orderId) => {
+        if (e && e.preventDefault) e.preventDefault();
+        const inp = document.getElementById('chat-input');
+        const text = inp?.value.trim();
+        if (!text || !currentUser) return;
+
+        try {
+          const senderRole = isOwnerMode ? 'owner' : 'customer';
+          const senderName = isOwnerMode ? 'SANDY SHORES (OWNER)' : (currentActiveOrder?.customerName || currentUser.displayName || 'Customer');
+
+          const newMsgRef = doc(collection(db, "orders", orderId, "messages"));
+          await setDoc(newMsgRef, {
+            id: newMsgRef.id,
+            orderId,
+            senderId: currentUser.uid,
+            senderName,
+            senderRole,
+            text,
+            createdAt: new Date().toISOString()
+          });
+
+          inp.value = '';
+        } catch (err) {
+          console.error(err);
+          toast('Failed to send message.');
+        }
+      };
+
+      window.setOrderStatus = async (orderId, status) => {
+        try {
+          await updateDoc(doc(db, "orders", orderId), { status });
+          const newMsgRef = doc(collection(db, "orders", orderId, "messages"));
+          await setDoc(newMsgRef, {
+            id: newMsgRef.id,
+            orderId,
+            senderId: 'system',
+            senderName: 'SYSTEM',
+            senderRole: 'system',
+            text: `Order status changed to: ${status}`,
+            createdAt: new Date().toISOString()
+          });
+          toast(`Status updated to: ${status}`);
+          window.openOrder(orderId);
+        } catch (err) {
+          console.error(err);
+          toast('Failed to update status.');
+        }
+      };
+
+      window.showStore = () => {
+        if (chatUnsubscribe) chatUnsubscribe();
+        currentActiveOrder = null;
+        const orderView = document.getElementById('order-view');
+        const sellerView = document.getElementById('seller-orders-view');
+        const storefront = document.getElementById('storefront');
+        if (orderView) orderView.classList.remove('active');
+        if (sellerView) sellerView.classList.remove('active');
+        if (storefront) storefront.style.display = 'block';
+
+        const sellerTopNotice = document.getElementById('seller-top-notice');
+        if (sellerTopNotice) sellerTopNotice.style.display = isOwnerMode ? 'block' : 'none';
+      };
+
+      // SELLER ALL ORDERS LOGIC
+      let sellerStatusFilter = 'All';
+      let sellerSearchQuery = '';
+
+      window.setSellerStatusFilter = (status) => {
+        sellerStatusFilter = status;
+        window.renderSellerOrders();
+      };
+
+      window.handleSellerSearch = (val) => {
+        sellerSearchQuery = (val || '').toLowerCase();
+        window.renderSellerOrders();
+      };
+
+      window.copyToClipboard = (text, label) => {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text);
+          toast(`Copied ${label}: ${text}`);
+        }
+      };
+
+      window.showSellerOrders = () => {
+        if (chatUnsubscribe) chatUnsubscribe();
+        currentActiveOrder = null;
+
+        const storefront = document.getElementById('storefront');
+        const orderView = document.getElementById('order-view');
+        const sellerView = document.getElementById('seller-orders-view');
+
+        if (storefront) storefront.style.display = 'none';
+        if (orderView) orderView.classList.remove('active');
+        if (sellerView) {
+          sellerView.classList.add('active');
+          window.renderSellerOrders();
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
       };
 
-      window.showStore = function() {
-        const orderView = document.getElementById('order-view');
-        const storefront = document.getElementById('storefront');
-        if (orderView) orderView.classList.remove('active');
-        if (storefront) storefront.style.display = 'block';
+      window.renderSellerOrders = () => {
+        const sellerView = document.getElementById('seller-orders-view');
+        if (!sellerView) return;
+
+        // Metrics calculations
+        const total = currentOrders.length;
+        const pending = currentOrders.filter(o => o.status === 'Payment submitted').length;
+        const delivering = currentOrders.filter(o => o.status === 'Payment verified' || o.status === 'In delivery').length;
+        const completed = currentOrders.filter(o => o.status === 'Completed').length;
+        const revenue = currentOrders
+          .filter(o => ['Completed', 'Payment verified', 'In delivery'].includes(o.status))
+          .reduce((sum, o) => sum + (o.total || 0), 0);
+
+        // Filter orders
+        const filtered = currentOrders.filter(o => {
+          const matchStatus = sellerStatusFilter === 'All' ? true : (o.status === sellerStatusFilter);
+          const q = sellerSearchQuery.trim().toLowerCase();
+          const matchQuery = !q ? true : (
+            (o.id && o.id.toLowerCase().includes(q)) ||
+            (o.customerName && o.customerName.toLowerCase().includes(q)) ||
+            (o.product && o.product.toLowerCase().includes(q)) ||
+            (o.paymentReference && o.paymentReference.toLowerCase().includes(q))
+          );
+          return matchStatus && matchQuery;
+        });
+
+        const statusClasses = {
+          'Payment submitted': 'submitted',
+          'Payment verified': 'verified',
+          'In delivery': 'delivery',
+          'Completed': 'completed',
+          'Cancelled': 'cancelled'
+        };
+
+        const filterPills = ['All', 'Payment submitted', 'Payment verified', 'In delivery', 'Completed', 'Cancelled'];
+
+        sellerView.innerHTML = `
+          <div class="seller-banner">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <a href="#" onclick="window.showStore(); return false;" style="font-family: Orbitron; font-size: 11px; font-weight: 700; color: var(--cyan); text-decoration: none; display: inline-block; margin-bottom: 6px;">
+                  ← BACK TO MARKETPLACE STOREFRONT
+                </a>
+                <h1 style="font-family: Orbitron; font-weight: 900; font-size: 26px; color: #fff; margin: 0;">
+                  ALL ONGOING ORDERS &amp; LIVE CHATS
+                </h1>
+                <p style="color: var(--muted); margin: 6px 0 0; font-size: 14px;">
+                  Real-time synchronized Firestore seller dispatch queue. View Roblox customer accounts, payment UTR references, change order status, and access 1-on-1 customer chats.
+                </p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <button onclick="window.showStore()" style="background: rgba(0, 217, 255, 0.12); border: 1px solid var(--cyan); color: var(--cyan); padding: 8px 14px; border-radius: 8px; font-family: Orbitron; font-size: 11px; font-weight: 700; cursor: pointer;">
+                  STOREFRONT VIEW
+                </button>
+              </div>
+            </div>
+
+            <div class="seller-metrics">
+              <div class="metric-card">
+                <small>TOTAL ORDERS</small>
+                <strong>${total}</strong>
+              </div>
+              <div class="metric-card">
+                <small style="color: #ff9f1c;">PENDING REVIEW</small>
+                <strong style="color: #ff9f1c;">${pending}</strong>
+              </div>
+              <div class="metric-card">
+                <small style="color: var(--amber);">IN DELIVERY</small>
+                <strong style="color: var(--amber);">${delivering}</strong>
+              </div>
+              <div class="metric-card">
+                <small style="color: var(--green);">COMPLETED</small>
+                <strong style="color: var(--green);">${completed}</strong>
+              </div>
+              <div class="metric-card">
+                <small style="color: var(--cyan);">TOTAL REVENUE</small>
+                <strong style="color: var(--cyan);">${money(revenue)}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div class="seller-controls">
+            <input
+              type="text"
+              class="seller-search"
+              placeholder="Search by order ID, Roblox username, item, or UTR..."
+              value="${esc(sellerSearchQuery)}"
+              oninput="window.handleSellerSearch(this.value)"
+            />
+
+            <div class="seller-filters">
+              ${filterPills.map(f => `
+                <button
+                  class="seller-filter-btn ${sellerStatusFilter === f ? 'active' : ''}"
+                  onclick="window.setSellerStatusFilter('${f}')"
+                >
+                  ${f.toUpperCase()}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+
+          ${filtered.length === 0 ? `
+            <div style="text-align: center; padding: 60px 20px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px;">
+              <h3 style="font-family: Orbitron; color: #fff; margin-bottom: 8px;">NO MATCHING ORDERS FOUND</h3>
+              <p style="color: var(--muted); font-size: 14px;">Try selecting a different status filter or clearing your search term.</p>
+            </div>
+          ` : filtered.map(o => {
+            const badgeClass = statusClasses[o.status] || 'submitted';
+            return `
+              <article class="seller-order-card">
+                <div class="seller-card-head">
+                  <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <strong style="font-family: Orbitron; font-size: 15px; color: #fff; letter-spacing: 0.5px;">
+                      #${esc(o.id)}
+                    </strong>
+                    <span class="seller-status-badge ${badgeClass}">
+                      ${esc(o.status)}
+                    </span>
+                    <span style="color: var(--muted); font-size: 13px;">
+                      ${o.createdAt ? new Date(o.createdAt).toLocaleString() : 'Just now'}
+                    </span>
+                  </div>
+
+                  <button class="open-chat-btn" onclick="window.openOrder('${o.id}')">
+                    OPEN 1-ON-1 CHAT &rarr;
+                  </button>
+                </div>
+
+                <div class="seller-card-grid">
+                  <div class="seller-card-col">
+                    <span>CUSTOMER (ROBLOX)</span>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+                      <strong style="color: var(--green); font-size: 15px; font-family: Orbitron;">@${esc(o.customerName || 'Anonymous')}</strong>
+                      <button onclick="window.copyToClipboard('${esc(o.customerName || '')}', 'Roblox Name')" style="background: none; border: none; color: var(--cyan); cursor: pointer; font-size: 11px; font-weight: 700; font-family: Orbitron;">COPY</button>
+                    </div>
+                    <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 3px;">UID: ${esc(o.customerUid ? o.customerUid.slice(0, 10) + '...' : 'Unknown')}</small>
+                  </div>
+
+                  <div class="seller-card-col">
+                    <span>PURCHASED ITEM</span>
+                    <strong style="color: #fff; font-size: 15px;">${esc(o.product)} ${o.quantity > 1 ? `&times; ${o.quantity}` : ''}</strong>
+                    <div style="color: var(--cyan); font-family: Orbitron; font-weight: 900; font-size: 14px; margin-top: 2px;">
+                      ${money(o.total)}
+                    </div>
+                  </div>
+
+                  <div class="seller-card-col">
+                    <span>PAYMENT REFERENCE / UTR</span>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+                      <code style="color: var(--cyan); font-size: 13px; word-break: break-all;">${esc(o.paymentReference || 'None')}</code>
+                      ${o.paymentReference ? `<button onclick="window.copyToClipboard('${esc(o.paymentReference)}', 'Payment Reference')" style="background: none; border: none; color: var(--cyan); cursor: pointer; font-size: 11px; font-weight: 700; font-family: Orbitron;">COPY</button>` : ''}
+                    </div>
+                    <small style="color: var(--muted); font-size: 11px; display: block; margin-top: 3px;">Method: ${esc(o.paymentMethod || 'UPI / QR')}</small>
+                  </div>
+                </div>
+
+                ${o.customerNote ? `
+                  <div style="background: rgba(3, 10, 20, 0.4); border: 1px dashed rgba(0, 217, 255, 0.2); border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 13px; color: #d0e6f5;">
+                    <b style="color: var(--amber); font-family: Orbitron; font-size: 11px;">BUYER NOTE:</b> "${esc(o.customerNote)}"
+                  </div>
+                ` : ''}
+
+                <div class="seller-action-row">
+                  <div class="seller-status-actions">
+                    <span style="font-family: Orbitron; font-size: 11px; color: var(--muted); margin-right: 4px;">UPDATE STATUS:</span>
+                    <button class="status-action-btn" onclick="window.setOrderStatus('${o.id}', 'Payment verified')">Verify Payment</button>
+                    <button class="status-action-btn" onclick="window.setOrderStatus('${o.id}', 'In delivery')">In Delivery</button>
+                    <button class="status-action-btn" onclick="window.setOrderStatus('${o.id}', 'Completed')">Completed</button>
+                    <button class="status-action-btn" style="color: var(--pink);" onclick="window.setOrderStatus('${o.id}', 'Cancelled')">Cancel</button>
+                  </div>
+
+                  <button class="open-chat-btn" onclick="window.openOrder('${o.id}')">
+                    OPEN 1-ON-1 CHAT &rarr;
+                  </button>
+                </div>
+              </article>
+            `;
+          }).join('')}
+        `;
       };
 
-      function renderMessages(o) {
-        const b = document.getElementById('messages');
-        if (!b) return;
-        b.innerHTML = o.messages.map(m => `<div class="message ${m.type === 'system' ? 'system' : ''}">${esc(m.text)}<small>${new Date(m.at).toLocaleString()}</small></div>`).join('');
-        b.scrollTop = b.scrollHeight;
-      }
-
-      window.sendMessage = function(e, id) {
-        if (e && e.preventDefault) e.preventDefault();
-        const inp = document.getElementById('message-input');
-        const text = inp?.value.trim() || '';
-        if (!text) return;
-        const o = orders.find(x => x.id === id);
-        if (!o) return;
-        o.messages.push({ type: 'customer', text, at: new Date().toISOString() });
-        save();
-        renderMessages(o);
-        if (inp) inp.value = '';
-        toast('Message saved to your order.');
-      };
-
-      function toast(text) {
-        const t = document.getElementById('toast');
-        if (!t) return;
-        t.textContent = text;
-        t.classList.add('show');
-        setTimeout(() => t?.classList.remove('show'), 3000);
-      }
-
+      renderStore();
       const discordNav = document.getElementById('discord-nav');
       const discordCta = document.getElementById('discord-cta');
       const yearEl = document.getElementById('year');
       if (discordNav) discordNav.href = STORE_CONFIG.discordInvite;
       if (discordCta) discordCta.href = STORE_CONFIG.discordInvite;
       if (yearEl) yearEl.textContent = String(new Date().getFullYear());
-
-      renderStore();
-      renderOrderCount();
     }
   </script>
 </body>
